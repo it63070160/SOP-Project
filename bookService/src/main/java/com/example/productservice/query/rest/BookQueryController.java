@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/books")
-@CrossOrigin("http://localhost:8081/")
+@CrossOrigin("http://127.0.0.1:5500/")
 public class BookQueryController {
     @Autowired
     QueryGateway queryGateway;
