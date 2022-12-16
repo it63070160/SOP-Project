@@ -1,4 +1,4 @@
-const BOOK_API_BASE_URL = "http://localhost:8082/books"
+const BOOK_API_BASE_URL = "http://localhost:8082/book-service/books"
 
 function getBooks(){
     return axios.get(BOOK_API_BASE_URL);

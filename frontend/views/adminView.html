@@ -10,7 +10,7 @@
     <!-- vue script -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     <!-- axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios@1.2.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.2.1/dist/axios.min.js"></script>
     <script type="text/javascript" src="../js/BookService.js"></script>
     <script type="text/javascript" src="../js/UserService.js"></script>
 </head>
@@ -40,7 +40,7 @@
                 </div>
             </div>
         </div>
-        <h1 class="text-center"> Books List</h1>
+        <h1 class="text-center">Books List</h1>
         <table class="table table-hover">
             <thead>
                 <th>ID</th>
@@ -69,12 +69,37 @@
                 </tr>
             </tbody>
         </table>
+        <h1 class="text-center">Users List</h1>
+        <table class="table table-hover">
+            <thead>
+                <th>ID</th>
+                <th>username</th>
+                <th>email</th>
+                <th>address</th>
+                <th>role</th>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr v-for="user in users" v-bind:key="user.userId">
+                    <td>{{user.userId}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.address}}</td>
+                    <td>{{user.role}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModal(book)"><i class="fa-solid fa-circle-info"></i></button>
+                        <button type="button" class="btn btn-warning" style="margin: 5px"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" style="margin: 5px"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
     <script>
         var app = new Vue({
             el: '#app',
             data: {
                 books : [],
+                users : [],
                 showInfoModal : false,
                 bookInModal : []
             },
@@ -82,6 +107,11 @@
                 getAllBooks(){
                     getBooks().then((response)=>{
                         this.books = response.data;
+                    })
+                },
+                getAllUsers(){
+                    getUsers().then((response)=>{
+                        this.users = response.data;
                     })
                 },
                 deleteBook(){
@@ -100,6 +130,7 @@
             },
             created() {
                 this.getAllBooks();
+                this.getAllUsers();
             }
         })
     </script>

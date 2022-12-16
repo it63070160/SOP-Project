@@ -54,7 +54,6 @@
                 register(){
                     this.userInfo = {username:this.username, password:this.password, email:this.email}
                     createUser(this.userInfo).then((response)=>{
-                        console.log(response.data.indexOf("Error:"))
                         if(response.data.indexOf("Error:") >= 0){
                             this.error = true
                             this.message = response.data
