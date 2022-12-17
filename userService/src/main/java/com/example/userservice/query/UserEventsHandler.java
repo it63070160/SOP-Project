@@ -3,6 +3,7 @@ package com.example.userservice.query;
 import com.example.userservice.core.UserEntity;
 import com.example.userservice.core.data.UserRepository;
 import com.example.userservice.core.event.UserCreatedEvent;
+import com.example.userservice.core.event.UserDeletedEvent;
 import com.example.userservice.core.event.UserEditedEvent;
 import org.axonframework.eventhandling.EventHandler;
 import org.springframework.beans.BeanUtils;
@@ -28,5 +29,12 @@ public class UserEventsHandler {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(event, userEntity);
         userRepository.save(userEntity);
+    }
+
+    @EventHandler
+    public void on(UserDeletedEvent event){
+        UserEntity userEntity = new UserEntity();
+        BeanUtils.copyProperties(event, userEntity);
+        userRepository.delete(userEntity);
     }
 }

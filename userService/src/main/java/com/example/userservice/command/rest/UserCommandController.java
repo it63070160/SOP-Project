@@ -1,6 +1,7 @@
 package com.example.userservice.command.rest;
 
 import com.example.userservice.command.CreateUserCommand;
+import com.example.userservice.command.DeleteUserCommand;
 import com.example.userservice.command.EditUserCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,6 @@ public class UserCommandController {
 
     @PutMapping
     public String editUser(@RequestBody EditUserRestModel model){
-        System.out.println(model);
         EditUserCommand command = EditUserCommand.builder()
                 .userId(model.getId())
                 .username(model.getUsername())
@@ -59,7 +59,16 @@ public class UserCommandController {
     }
 
     @DeleteMapping
-    public String deleteBook(){
-        return "product deleted";
+    public String deleteUser(@RequestBody DeleteUserRestModel model){
+        DeleteUserCommand command = DeleteUserCommand.builder()
+                .userId(model.getId())
+                .build();
+        String result;
+        try{
+            result = commandGateway.sendAndWait(command);
+        }catch (Exception e){
+            result = e.getLocalizedMessage();
+        }
+        return result;
     }
 }
