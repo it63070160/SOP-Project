@@ -16,7 +16,7 @@
 </head>
 <body>
     <div class="container" id="app">
-        <!-- Modal -->
+        <!-- Book Info Modal -->
         <div v-show="showInfoModal" class="modal fade" :class="{ show: showInfoModal, 'd-block': showInfoModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -61,6 +61,40 @@
                 </div>
             </div>
         </div>
+        <!-- Book Edit Modal -->
+        <div v-show="showEditBookModal" class="modal fade" :class="{ show: showEditBookModal, 'd-block': showEditBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Book</h1>
+                        <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                    </div>
+                    <div class="modal-body" style="text-align:left">
+                        <div class="form-group">
+                            <label for="name">Edit Book Name</label>
+                            <input v-model="eName" id="name" class="form-control">
+                            <label for="description">Edit Description</label>
+                            <input v-model="eDescription" id="description" class="form-control">
+                            <label for="type">Edit Type</label>
+                            <input v-model="eType" id="type" class="form-control">
+                            <label for="quantity">Edit Quantity</label>
+                            <input v-model="eQuantity" id="quantity" class="form-control">
+                            <label for="price">Edit Price</label>
+                            <input v-model="ePrice" id="price" class="form-control">
+                            <label for="checkoutType">Edit Checkout Type</label>
+                            <input v-model="eCheckoutType" id="checkoutType" class="form-control">
+                            <label for="ownerId">Edit Owner ID</label>
+                            <input v-model="eOwnerId" id="ownerId" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveBook">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- User Edit Modal -->
         <div v-show="showEditUserModal" class="modal fade" :class="{ show: showEditUserModal, 'd-block': showEditUserModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -83,13 +117,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="save">Save</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveUser">Save</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- User Edit Modal -->
+        <!-- User Delete Modal -->
         <div v-show="showdeleteUserModal" class="modal fade" :class="{ show: showdeleteUserModal, 'd-block': showdeleteUserModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -102,7 +136,26 @@
                         Are you sure?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="del">Delete</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteUser">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Book Delete Modal -->
+        <div v-show="showdeleteBookModal" class="modal fade" :class="{ show: showdeleteBookModal, 'd-block': showdeleteBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Book</h1>
+                        <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                    </div>
+                    <div class="modal-body" style="text-align:left">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteBook">Delete</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
                     </div>
                 </div>
@@ -130,9 +183,9 @@
                     <td>{{book.checkOutType}}</td>
                     <td>{{book.ownerId}}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModal(book)"><i class="fa-solid fa-circle-info"></i></button>
-                        <button type="button" class="btn btn-warning" style="margin: 5px"><i class="fa-regular fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger" style="margin: 5px"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalInfoBook(book)"><i class="fa-solid fa-circle-info"></i></button>
+                        <button type="button" class="btn btn-warning" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalEditBook(book)"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalDeleteBook(book)"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             </tbody>
@@ -155,7 +208,7 @@
                     <td>{{user.address}}</td>
                     <td>{{user.role}}</td>
                     <td>
-                        <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalUser(user)"><i class="fa-solid fa-circle-info"></i></button>
+                        <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalInfoUser(user)"><i class="fa-solid fa-circle-info"></i></button>
                         <button type="button" class="btn btn-warning" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalEditUser(user)"><i class="fa-regular fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-danger" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalDeleteUser(user)"><i class="fa-solid fa-trash"></i></button>
                     </td>
@@ -170,17 +223,27 @@
                 books : [],
                 users : [],
                 showInfoModal : false,
-                bookInModal : [],
+                bookInModal : [], // model in Info
                 showUserInfoModal : false,
-                userInModal : [],
+                userInModal : [], // model in Info
                 eUsername : "",
                 eEmail : "",
                 eAddress : "",
                 eRole : "",
                 eId : "",
+                eName : "",
+                eType : "",
+                eQuantity : "",
+                ePrice : "",
+                eCheckoutType : "",
+                eOwnerId : "",
+                eDescription : "",
                 showEditUserModal : false,
-                userInfo : {id:"" ,username:"", email:"", address:"", role:""},
+                userInfo : [], // model in Edit
                 showdeleteUserModal : false,
+                showEditBookModal : false,
+                bookInfo : [], // model in Edit
+                showdeleteBookModal : false,
             },
             methods:{
                 getAllBooks(){
@@ -193,16 +256,24 @@
                         this.users = response.data;
                     })
                 },
-                deleteBook(){
-                    
-                },
-                openModal(book){
+                openModalInfoBook(book){
                     this.showInfoModal = true;
                     this.bookInModal = book;
                 },
-                openModalUser(user){
+                openModalInfoUser(user){
                     this.showUserInfoModal = true;
                     this.userInModal = user;
+                },
+                openModalEditBook(book){
+                    this.eId = book.bookId
+                    this.eName = book.bookName
+                    this.eType = book.bookType
+                    this.eQuantity = book.bookQuantity
+                    this.ePrice = book.bookPrice
+                    this.eCheckoutType = book.checkOutType
+                    this.eOwnerId = book.ownerId
+                    this.eDescription = book.bookDescription
+                    this.showEditBookModal = true
                 },
                 openModalEditUser(user){
                     this.eUsername = user.username;
@@ -217,12 +288,28 @@
                     this.showUserInfoModal = false
                     this.showEditUserModal = false
                     this.showdeleteUserModal = false
+                    this.showEditBookModal = false
+                    this.showdeleteBookModal = false
                 },
-                save(){
+                saveBook(){
+                    this.bookInfo = {bookId: this.eId, bookName: this.eName, bookDescription: this.eDescription, bookType : this.eType, bookQuantity: this.eQuantity, bookPrice: this.ePrice, checkOutType: this.eCheckoutType, ownerId: this.eOwnerId}
+                    editBook(this.bookInfo).then((response)=>{
+                        this.showEditBookModal = false
+                        getBooks().then((response)=>{
+                            this.books = response.data;
+                        })
+                    }).catch((error)=>{
+                        console.log(error)
+                        this.showEditBookModal = false
+                    });
+                },
+                saveUser(){
                     this.userInfo = {id:this.eId ,username:this.eUsername, email:this.eEmail, address:this.eAddress, role:this.eRole}
                     editUser(this.userInfo).then((response)=>{
                         this.showEditUserModal = false
-                        this.getAllUsers()
+                        getUsers().then((response)=>{
+                            this.users = response.data;
+                        })
                     }).catch((error)=>{
                         console.log(error)
                         this.showEditUserModal = false
@@ -232,14 +319,32 @@
                     this.eId = user.userId;
                     this.showdeleteUserModal = true;
                 },
-                del(){
+                deleteUser(){
                     deleteUser({id : this.eId}).then((response)=>{
                         console.log(response)
                         this.showdeleteUserModal = false
-                        this.getAllUsers()
+                        getUsers().then((response)=>{
+                            this.users = response.data;
+                        })
                     }).catch((error)=>{
                         console.log(error)
                         this.showdeleteUserModal = false
+                    })
+                },
+                openModalDeleteBook(book){
+                    this.eId = book.bookId;
+                    this.showdeleteBookModal = true;
+                },
+                deleteBook(){
+                    deleteBook({id : this.eId}).then((response)=>{
+                        console.log(response)
+                        this.showdeleteBookModal = false
+                        getBooks().then((response)=>{
+                            this.books = response.data;
+                        })
+                    }).catch((error)=>{
+                        console.log(error)
+                        this.showdeleteBookModal = false
                     })
                 }
             },
