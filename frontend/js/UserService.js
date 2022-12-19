@@ -12,3 +12,6 @@ function editUser(userInfo){
 function deleteUser(userId){
     return axios.delete(USER_API_BASE_URL, { data: userId });
 }
+function checkUser(loginInfo){
+    return axios.get(USER_API_BASE_URL+loginInfo.username);
+}

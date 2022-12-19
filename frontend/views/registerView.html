@@ -34,7 +34,7 @@
                     <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon3" v-model="email" required>
                 </div>
                 <button type="button" class="btn btn-success me-3" @click="register">Register</button>
-                <a href="../index.html"><button type="button" class="btn btn-secondary">Back</button></a>
+                <a href="./loginView.html"><button type="button" class="btn btn-secondary">Back</button></a>
             </div>
         </div>
     </div>
@@ -61,11 +61,12 @@
                             this.error = false
                             this.message = "Welcome "+this.username
                             alert("Welcome "+this.username)
+                            localStorage.setItem("userId", response.data)
                             window.location.href = "../index.html"
                         }
-                    }).catch(()=>{
+                    }).catch((e)=>{
                         this.error = true
-                        this.message = "Error: Can't create account"
+                        this.message = e
                     })
                 },
             },
