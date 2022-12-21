@@ -32,4 +32,18 @@ public class OrderQueryHandler {
         }
         return ordersRest;
     }
+
+    @QueryHandler
+    List<OrderRestModel> findOrdersByBuyer(FindOrderByBuyerQuery query){
+        List<OrderRestModel> ordersRest = new ArrayList<>();
+        List<OrderEntity> storedOrders = orderRepository.findByBuyer(query.getId());
+        System.out.println(storedOrders); // Remove = Error ??? How
+        for(OrderEntity orderEntity : storedOrders){
+            OrderRestModel orderRestModel = new OrderRestModel();
+//            Hibernate.initialize(orderRestModel.getBookList());
+            BeanUtils.copyProperties(orderEntity, orderRestModel);
+            ordersRest.add(orderRestModel);
+        }
+        return ordersRest;
+    }
 }
