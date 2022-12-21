@@ -299,6 +299,7 @@
                         getUser(token).then((response)=> {
                             getUserById(response.data.id).then(response => {
                                 this.userLogin = response.data
+                                console.log(this.userLogin)
                                 this.getAllBooks();
                             }).catch(err => {
                                 console.log(err)
