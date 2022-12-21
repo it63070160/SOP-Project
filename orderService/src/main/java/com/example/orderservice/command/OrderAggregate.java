@@ -2,6 +2,7 @@ package com.example.orderservice.command;
 
 import com.example.orderservice.core.UserOrderedEntity;
 import com.example.orderservice.core.event.OrderCreatedEvent;
+import com.example.orderservice.core.event.OrderDeletedEvent;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
@@ -34,6 +35,13 @@ public class OrderAggregate {
         AggregateLifecycle.apply(orderCreatedEvent);
     }
 
+    @CommandHandler
+    public void OrderAggregateDelete(DeleteOrderCommand deleteOrderCommand){
+        OrderDeletedEvent orderDeletedEvent = new OrderDeletedEvent();
+        BeanUtils.copyProperties(deleteOrderCommand, orderDeletedEvent);
+        AggregateLifecycle.apply(orderDeletedEvent);
+    }
+
     @EventSourcingHandler
     public void on(OrderCreatedEvent orderCreatedEvent){
         this.orderId = orderCreatedEvent.getOrderId();
@@ -41,4 +49,10 @@ public class OrderAggregate {
         this.bookList = orderCreatedEvent.getBookList();
         this.total = orderCreatedEvent.getTotal();
     }
+
+    @EventSourcingHandler
+    public void on(OrderDeletedEvent bookDeletedEvent){
+        this.orderId = bookDeletedEvent.getOrderId();
+    }
+
 }

@@ -15,6 +15,6 @@ function getUserOrders(userId){
 function addNewOrder(orderInfo){
     return axios.post(ORDER_API_BASE_URL, orderInfo)
 }
-function deleteOrder(){
-    return axios.delete(ORDER_API_BASE_URL);
-}
+// function deleteOrder(){
+//     return axios.delete(ORDER_API_BASE_URL);
+// }

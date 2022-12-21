@@ -12,6 +12,7 @@
     <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios@1.2.0/dist/axios.min.js"></script>
     <script type="text/javascript" src="../js/UserService.js"></script>
+    <script type="text/javascript" src="../js/AuthService.js"></script>
 </head>
 <body>
     <div class="container" id="app">
@@ -33,6 +34,20 @@
                     <span class="input-group-text" id="basic-addon3"><i class="fa-solid fa-envelope"></i></span>
                     <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="basic-addon3" v-model="email" required>
                 </div>
+                <div class="d-md-flex justify-content-start align-items-center mb-4 py-2">
+
+                    <h6 class="mb-0 me-4">Role </h6>
+                    <div class="form-check form-check-inline mb-0 me-4">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="User"
+                        value="User" v-model="role" required/>
+                      <label class="form-check-label" for="User">User</label>
+                    </div>
+                    <div class="form-check form-check-inline mb-0 me-4">
+                      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Merchant"
+                        value="Merchant" v-model="role"/>
+                      <label class="form-check-label" for="Merchant">Merchant</label>
+                    </div>
+                </div>
                 <button type="button" class="btn btn-success me-3" @click="register">Register</button>
                 <a href="./loginView.html"><button type="button" class="btn btn-secondary">Back</button></a>
             </div>
@@ -49,10 +64,11 @@
                 showAlert: false,
                 userInfo:{username:"", password:"", email:""},
                 error: false,
+                role: "",
             },
             methods:{
                 register(){
-                    this.userInfo = {username:this.username, password:this.password, email:this.email}
+                    this.userInfo = {username:this.username, password:this.password, email:this.email, role: this.role}
                     createUser(this.userInfo).then((response)=>{
                         if(response.data.indexOf("Error:") >= 0){
                             this.error = true
@@ -60,8 +76,18 @@
                         }else{
                             this.error = false
                             this.message = "Welcome "+this.username
+                            getToken({username: this.username, password: this.password}).then((response)=>{
+                                this.error = false
+                                this.message = "Welcome "+this.userInfo.username
+                                localStorage.setItem('token', JSON.stringify({
+                                    'accessToken':response.data.accessToken,
+                                    'refreshToken':response.data.refreshToken
+                                }))
+                            }).catch(err => {
+                                this.error = true
+                                this.message = "Something wrong\nPlease try again later"
+                            })
                             alert("Welcome "+this.username)
-                            localStorage.setItem("userId", response.data)
                             window.location.href = "../index.html"
                         }
                     }).catch((e)=>{
