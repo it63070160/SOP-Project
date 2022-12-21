@@ -4,6 +4,7 @@ import com.example.userservice.command.CreateUserCommand;
 import com.example.userservice.command.DeleteUserCommand;
 import com.example.userservice.command.EditUserCommand;
 import org.axonframework.commandhandling.gateway.CommandGateway;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,12 +12,14 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("http://127.0.0.1:5500/")
+//@CrossOrigin("http://127.0.0.1:5500")
 public class UserCommandController {
     private final CommandGateway commandGateway;
+    @Autowired
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public UserCommandController(CommandGateway commandGateway){
+    public UserCommandController(CommandGateway commandGateway, RabbitTemplate rabbitTemplate){
         this.commandGateway = commandGateway;
     }
 
@@ -28,8 +31,7 @@ public class UserCommandController {
                 .password(model.getPassword())
                 .email(model.getEmail())
                 .address(model.getAddress())
-                .role("User")
-                .ownBook(null)
+                .role(model.getRole())
                 .build();
         String result;
         try{
@@ -48,6 +50,7 @@ public class UserCommandController {
                 .email(model.getEmail())
                 .address(model.getAddress())
                 .role(model.getRole())
+                .password(model.getPassword())
                 .build();
         String result;
         try{
@@ -59,14 +62,15 @@ public class UserCommandController {
     }
 
     @DeleteMapping
-    public String deleteUser(@RequestBody DeleteUserRestModel model){
+    public String deleteUser(@RequestBody DeleteUserRestModel model) {
         DeleteUserCommand command = DeleteUserCommand.builder()
                 .userId(model.getId())
                 .build();
+        rabbitTemplate.convertAndSend("MyDirectExchange","deleteUser", model.getId());
         String result;
-        try{
+        try {
             result = commandGateway.sendAndWait(command);
-        }catch (Exception e){
+        } catch (Exception e) {
             result = e.getLocalizedMessage();
         }
         return result;

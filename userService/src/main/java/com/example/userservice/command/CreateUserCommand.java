@@ -15,5 +15,4 @@ public class CreateUserCommand {
     private final String email;
     private final String address;
     private final String role;
-    private final String ownBook;
 }

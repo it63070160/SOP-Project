@@ -20,7 +20,6 @@ public class UserAggregate {
     private String email;
     private String address;
     private String role;
-    private String ownBook;
 
     public UserAggregate(){}
 
@@ -40,6 +39,9 @@ public class UserAggregate {
 //        }
         if(createUserCommand.getEmail() == null || createUserCommand.getEmail().isBlank()){
             throw new IllegalArgumentException("Error: Email cannot be empty");
+        }
+        if(createUserCommand.getRole() == null || createUserCommand.getRole().isBlank()){
+            throw new IllegalArgumentException("Error: Role must be select");
         }
 
         UserCreatedEvent userCreatedEvent = new UserCreatedEvent();
@@ -72,22 +74,6 @@ public class UserAggregate {
 
     @CommandHandler
     public void UserAggregateDelete(DeleteUserCommand deleteUserCommand){
-//        if(editUserCommand.getUsername() == null || editUserCommand.getUsername().isBlank()){
-//            throw new IllegalArgumentException("Error: Username cannot be empty");
-//        }
-//        if(editUserCommand.getPassword() == null || editUserCommand.getPassword().isBlank()){
-//            throw new IllegalArgumentException("Error: Password cannot be empty");
-//        }
-//        if(createBookCommand.getBookType() != "E-Book" || createBookCommand.getBookType() != "Book"){
-//            throw new IllegalArgumentException("Book Type not allowed (E-book, Book)");
-//        }
-//        if(createBookCommand.getCheckOutType() != "COD" || createBookCommand.getCheckOutType() != "Transfer"){
-//            throw new IllegalArgumentException("Transfer Type not allowed (Cash on Delivery, Transfer)");
-//        }
-//        if(editUserCommand.getEmail() == null || editUserCommand.getEmail().isBlank()){
-//            throw new IllegalArgumentException("Error: Email cannot be empty");
-//        }
-
         UserDeletedEvent userDeletedEvent = new UserDeletedEvent();
         BeanUtils.copyProperties(deleteUserCommand, userDeletedEvent);
         AggregateLifecycle.apply(userDeletedEvent);
@@ -101,28 +87,20 @@ public class UserAggregate {
         this.email = userCreatedEvent.getEmail();
         this.address = userCreatedEvent.getAddress();
         this.role = userCreatedEvent.getRole();
-        this.ownBook = userCreatedEvent.getOwnBook();
     }
 
     @EventSourcingHandler
     public void on(UserEditedEvent userEditedEvent){
         this.userId = userEditedEvent.getUserId();
         this.username = userEditedEvent.getUsername();
-//        this.password = userEditedEvent.getPassword();
+        this.password = userEditedEvent.getPassword();
         this.email = userEditedEvent.getEmail();
         this.address = userEditedEvent.getAddress();
         this.role = userEditedEvent.getRole();
-//        this.ownBook = userEditedEvent.getOwnBook();
     }
 
     @EventSourcingHandler
     public void on(UserDeletedEvent userDeletedEvent){
         this.userId = userDeletedEvent.getUserId();
-//        this.username = userEditedEvent.getUsername();
-//        this.password = userEditedEvent.getPassword();
-//        this.email = userEditedEvent.getEmail();
-//        this.address = userEditedEvent.getAddress();
-//        this.role = userEditedEvent.getRole();
-//        this.ownBook = userEditedEvent.getOwnBook();
     }
 }

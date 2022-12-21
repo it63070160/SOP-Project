@@ -29,4 +29,14 @@ public class UserQueryHandler {
         }
         return usersRest;
     }
+
+    @QueryHandler
+    UserRestModel findUserById(FindUserByIdQuery query){
+        UserEntity storedUser = userRepository.findByUserId(query.getId());
+        UserRestModel userRest = new UserRestModel();
+        BeanUtils.copyProperties(storedUser, userRest);
+        return userRest;
+    }
+
+
 }

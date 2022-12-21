@@ -1,5 +1,4 @@
 package com.example.userservice.core.event;
-
 import lombok.Data;
 
 @Data

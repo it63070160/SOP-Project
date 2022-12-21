@@ -10,5 +10,4 @@ public class CreateUserRestModel {
     private String email;
     private String address;
     private String role;
-    private String ownBook;
 }

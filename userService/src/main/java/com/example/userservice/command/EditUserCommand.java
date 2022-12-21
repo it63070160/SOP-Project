@@ -1,5 +1,4 @@
 package com.example.userservice.command;
-
 import lombok.Builder;
 import lombok.Data;
 import org.axonframework.modelling.command.TargetAggregateIdentifier;
@@ -14,4 +13,5 @@ public class EditUserCommand {
     private final String email;
     private final String address;
     private final String role;
+    private final String password;
 }

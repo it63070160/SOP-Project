@@ -2,8 +2,6 @@ package com.example.userservice.query.rest;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-
 @Data
 public class UserRestModel {
     private String userId;
@@ -12,5 +10,4 @@ public class UserRestModel {
     private String email;
     private String address;
     private String role;
-    private String ownBook;
 }
