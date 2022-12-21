@@ -221,7 +221,9 @@
             <p></p>
         </section>
         <section id="product1" class="section-p1">
-            <h2>New Release</h2>
+            <h1 v-if="userLogin.role=='User'">Ploikong Bookstore</h1>
+            <h1 v-if="userLogin.role=='Merchant'">Ploikong Bookstore For Merchant</h1>
+            <!-- <h2>New Release</h2> -->
             <div class="row row-cols-1 row-cols-md-5 g-5">
                 <div class="pro-container col" v-for="book in allBooks">
                     <div class="pro">
@@ -271,6 +273,7 @@
                     bookPrice: 0,
                     checkOutType: ""
                 },
+                userLogin: "",
             },
             computed:{
                 total(){
@@ -282,6 +285,33 @@
                 }
             },
             methods:{
+                getRole(){
+                    var token = localStorage.getItem("token");
+                    if (token == null){
+                        alert("Please login first.")
+                        localStorage.clear()
+                        window.location.href ="/views/loginView.html"
+                    }
+                    else{
+                        token = JSON.parse(token)
+                        getUser(token).then((response)=> {
+                            getUserById(response.data.id).then(response => {
+                                this.userLogin = response.data
+                                this.getAllBooks();
+                            }).catch(err => {
+                                console.log(err)
+                                alert("Please login again");
+                                localStorage.clear()
+                                window.location.href ="/views/loginView.html"
+                            })
+                        }).catch(err => {
+                            console.log(err)
+                            alert("Session timeout\nPlease login again");
+                            localStorage.clear()
+                            window.location.href ="/views/loginView.html"
+                        })
+                    }
+                },
                 getMyBooks(){
                     this.checkUserId()
                     getUserBooks(this.ownerId).then((response)=>{
@@ -398,7 +428,8 @@
             created() {
                 // this.checkUserId();
                 // this.getMyBooks();
-                this.getAllBooks();
+                // this.getAllBooks();
+                this.getRole();
             }
         })
     </script>
