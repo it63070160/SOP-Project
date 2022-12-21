@@ -33,10 +33,11 @@ public class OrderCommandController {
                 .buyer(model.getBuyer())
                 .bookList(model.getBookList())
                 .total(model.getTotal())
+                .buyerAddress(model.getBuyerAddress())
                 .build();
-        HashMap<String, String> res = (HashMap<String, String>) rabbitTemplate.convertSendAndReceive("MyDirectExchange", "createOrder", model.getBookList());
+        HashMap<String, String> res = (HashMap<String, String>) rabbitTemplate.convertSendAndReceive("MyDirectExchange", "createOrder", model.getBookList_String());
         if (res.get("status").equals("err")){
-            return "Cannot create order";
+            return "Error: Cannot create order";
         }
         String result;
         try{

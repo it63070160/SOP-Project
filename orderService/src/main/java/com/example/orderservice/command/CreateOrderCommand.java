@@ -14,6 +14,7 @@ public class CreateOrderCommand {
     @TargetAggregateIdentifier
     private final String orderId;
     private final String buyer;
+    private final String buyerAddress;
     private final List<UserOrderedEntity> bookList;
     private final BigDecimal total;
 }

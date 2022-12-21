@@ -18,6 +18,7 @@ public class OrderEntity implements Serializable {
     @Column(unique = true)
     private String orderId;
     private String buyer;
+    private String buyerAddress;
     @ElementCollection
     @CollectionTable(
             name = "user_ordered",

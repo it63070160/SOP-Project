@@ -18,6 +18,7 @@ public class OrderAggregate {
     @AggregateIdentifier
     private String orderId;
     private String buyer;
+    private String buyerAddress;
     private List<UserOrderedEntity> bookList;
     private BigDecimal total;
 
@@ -29,6 +30,9 @@ public class OrderAggregate {
         //validation
         if(createOrderCommand.getBuyer().isBlank() || createOrderCommand.getBuyer() == null){
             throw new IllegalArgumentException("Buyer cannot be empty");
+        }
+        if(createOrderCommand.getBuyerAddress().isBlank() || createOrderCommand.getBuyerAddress() == null){
+            throw new IllegalArgumentException("Buyer Address cannot be empty");
         }
         OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent();
         BeanUtils.copyProperties(createOrderCommand, orderCreatedEvent);
@@ -46,6 +50,7 @@ public class OrderAggregate {
     public void on(OrderCreatedEvent orderCreatedEvent){
         this.orderId = orderCreatedEvent.getOrderId();
         this.buyer = orderCreatedEvent.getBuyer();
+        this.buyerAddress = orderCreatedEvent.getBuyerAddress();
         this.bookList = orderCreatedEvent.getBookList();
         this.total = orderCreatedEvent.getTotal();
     }

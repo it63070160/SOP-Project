@@ -10,6 +10,7 @@ import java.util.List;
 public class OrderCreatedEvent {
     private String orderId;
     private String buyer;
+    private String buyerAddress;
     private List<UserOrderedEntity> bookList;
     private BigDecimal total;
 }

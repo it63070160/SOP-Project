@@ -7,7 +7,6 @@ function editOrder(orderInfo){
     return axios.put(ORDER_API_BASE_URL, orderInfo);
 }
 function deleteOrder(orderId){
-    console.log(orderId.bookList)
     return axios.delete(ORDER_API_BASE_URL, {data: orderId});
 }
 function getUserOrders(userId){
@@ -17,7 +16,7 @@ function addNewOrder(orderInfo){
     return axios.post(ORDER_API_BASE_URL, orderInfo)
 }
 function userGetOrders(userId){
-    return axios.get(ORDER_API_BASE_URL + "orderbybuyer?id=" + userIId)
+    return axios.get(ORDER_API_BASE_URL + "orderbybuyer?id=" + userId)
 }
 // function deleteOrder(){
 //     return axios.delete(ORDER_API_BASE_URL);

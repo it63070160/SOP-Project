@@ -1,10 +1,10 @@
 window.onscroll = function() {
     if (window.pageYOffset > 10) {
         document.getElementById('header').style = "position: fixed; width: 100%;"
-    }else{
+    }else if(window.pageYOffset < 2){
         document.getElementById('header').style = "position: relative; width: 100%;"
     }
-    if(window.pageYOffset > document.getElementById("product1").offsetTop-300){
+    if(window.pageYOffset > document.getElementById("product1").offsetTop-700){
         document.getElementById('shopNav').classList.add('active')
         document.getElementById('homeNav').classList.remove('active')
     }else{

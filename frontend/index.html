@@ -14,6 +14,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.2.0/dist/axios.min.js"></script>
     <script type="text/javascript" src="../js/BookService.js"></script>
     <script type="text/javascript" src="../js/UserService.js"></script>
+    <script type="text/javascript" src="../js/OrderService.js"></script>
     <script type="text/javascript" src="../js/main.js"></script>
 </head>
 <body>
@@ -111,9 +112,9 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea;">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">2</button>
+                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">3</button>
                         </div>
                         <div v-for="(cart, index) in carts" class="mb-5">
                             {{cart.bookName}}
@@ -132,22 +133,39 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">2</button>
+                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
-                            Address
-                            <div class="card h-50">
+                            <div class="card h-50 mb-5" v-if="userLogin.address.length>0">
                                 <div class="card-header">
                                     Your Address
                                 </div>
                                 <div class="card-body">
-                                    <div class="card-text" v-for="cart in carts">
-                                        {{cart.bookName}}<div class="float-end">x{{cart.quantity}}</div>
+                                    <div class="card-text">
+                                        {{userLogin.address}}
                                     </div>
                                 </div>
                             </div>
+                            <div class="card h-50 mb-5">
+                                <div class="form-floating">
+                                    <textarea class="form-control" :class="{'is-invalid': addressError}" placeholder="New address here" id="validationTextarea" style="height: 100px" v-model="newAddress" required></textarea>
+                                    <div class="invalid-feedback">
+                                        Please enter a new address.
+                                    </div>
+                                    <label for="floatingTextarea2">New Address</label>
+                                </div>
+                                <button class="btn btn-success" @click="saveNewAddress" v-if="savingAddress==-1">Save new address</button>
+                                <button class="btn btn-secondary" v-if="savingAddress==0" disabled>Loading . . .</button>
+                                <button class="btn btn-outline-success" v-if="savingAddress==1"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn btn-outline-danger" v-if="savingAddress==2"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+
+                            <select class="form-select" v-model="addressType" required>
+                                <option value="old" selected>Your Address</option>
+                                <option value="new">New Address (without save)</option>
+                            </select>
                         </div>
                     </div>
                     <div class="modal-body" v-if="cartStep==3" style="text-align: left;">
@@ -155,9 +173,9 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea">3</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">2</button>
+                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
                             <div class="card h-50">
@@ -175,24 +193,54 @@
                                     Confirm your address
                                 </div>
                                 <div class="card-body">
-                                    <div class="card-text">
-                                        
+                                    <div class="card-text" v-if="addressType=='new'">
+                                        {{newAddress}}
+                                    </div>
+                                    <div class="card-text" v-if="addressType=='old'">
+                                        {{userLogin.address}}
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-body" v-if="cartStep==4" style="text-align: left;">
+                        Your order was confirmed ! Thank for purchased
                     </div>
                     <div class="modal-footer" v-if="cartStep==1">
                         <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Close</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==2">
-                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="cartStep++">Next</button>
+                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="checkAddress">Next</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==3">
                         <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="checkOut">Check Out</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
+                    </div>
+                    <div class="modal-footer" v-if="cartStep==4">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Book Detail Modal -->
+        <div v-show="showBookDetailModal" class="modal fade" :class="{ show: showBookDetailModal, 'd-block': showBookDetailModal }" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="bookDetailModalLabel">{{bookDetail.bookName}}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeBookDetailModal"></button>
+                    </div>
+                    <div class="modal-body" v-if="cartStep==1" style="text-align: left;">
+                        <p>Book Description : {{bookDetail.bookDescription}}</p>
+                        <p>Book Type : {{bookDetail.bookType}}</p>
+                        <p>Book Price : {{bookDetail.bookPrice}}</p>
+                        <p>Book Owner : {{bookDetailOwner}}</p>
+                    </div>
+                    <div class="modal-footer" v-if="cartStep==1">
+                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeBookDetailModal">Close</button>
                     </div>
                 </div>
             </div>
@@ -203,7 +251,7 @@
                 <ul id="navbar" >
                     <li><a id="homeNav" class="active" @click="goToHome">Home</a></li>
                     <li><a id="shopNav" @click="goToShop" >Shop</a></li>
-                    <li v-if="userLogin.role == 'Admin'"><a id="adminNav" href="/views/adminView.html">Admin</a></li>
+                    <li v-if="userLogin.role == 'Admin'"><a id="adminNav" href="/views/adminView.html" target="_blank">Admin</a></li>
                     <li><a id="accountNav" href="/views/loginView.html"><i class="fa-regular fa-user"></i></a></li>
                     <li>
                         <a type="button" @click="openCartModal">
@@ -229,9 +277,9 @@
             <div class="row row-cols-1 row-cols-md-5 g-5">
                 <div class="pro-container col" v-for="book in allBooks">
                     <div class="pro">
-                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="">
-                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="">
-                        <div class="des">
+                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <div class="des" @click="openBookDetailModal(book)">
                             <h6 style="font-weight: bold;">{{book.bookName}}</h5>
                             <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h6>
                             <h5 v-else>{{book.bookDescription}}</h6>
@@ -257,9 +305,12 @@
                 bookPrice: 0.00,
                 checkoutType: "Cash On Delivery",
                 ownerId: "",
+                bookDetail: {},
+                bookDetailOwner: "",
                 showAlert: false,
                 showAddBookModal : false,
                 showCartModal: false,
+                showBookDetailModal: false,
                 cartStep: 1,
                 checkUserInfo: {},
                 error: false,
@@ -276,6 +327,12 @@
                     checkOutType: ""
                 },
                 userLogin: "",
+                newAddress: "",
+                savingAddress: -1,
+                addressType: "old",
+                addressError: false,
+                checkOutCart: [],
+                checkOutInfo: {}
             },
             computed:{
                 total(){
@@ -299,7 +356,6 @@
                         getUser(token).then((response)=> {
                             getUserById(response.data.id).then(response => {
                                 this.userLogin = response.data
-                                console.log(this.userLogin)
                                 this.getAllBooks();
                             }).catch(err => {
                                 console.log(err)
@@ -316,11 +372,10 @@
                     }
                 },
                 getMyBooks(){
-                    this.checkUserId()
                     getUserBooks(this.ownerId).then((response)=>{
                         this.myBooks = response.data
                     }).catch((e)=>{
-                        alert("1You need to login")
+                        alert("You need to login")
                         localStorage.clear()
                         window.location.href = "./views/loginView.html"
                     })
@@ -333,8 +388,68 @@
                 plusQty(index){
                     this.carts[index].quantity = this.carts[index].quantity + 1
                 },
+                checkAddress(){
+                    if(this.addressType == 'new' && this.newAddress.length <= 0){
+                        this.addressError = true;
+                    }else if(this.addressType == 'old' && this.userLogin.address.length <=0){
+                        this.addressError = true;
+                    }else{
+                        this.cartStep++
+                    }
+                },
+                saveNewAddress(){
+                    if(this.newAddress.length > 0){
+                        this.savingAddress = 0
+                        setTimeout(()=>{
+                            this.savingAddress = -1
+                        }, 5000)
+                        this.userLogin.address = this.newAddress
+                        this.userInfo = {
+                            id:this.userLogin.userId ,
+                            username:this.userLogin.username, 
+                            email:this.userLogin.email, 
+                            address:this.userLogin.address,
+                            role:this.userLogin.role, 
+                            password : this.userLogin.password
+                        }
+                        editUser(this.userInfo).then((response)=>{
+                            setTimeout(()=>{
+                                this.savingAddress = 1
+                            }, 3000)
+                        }).catch((error)=>{
+                            setTimeout(()=>{
+                                this.savingAddress = 2
+                            }, 3000)
+                        });
+                    }else{
+                        this.addressError = true
+                    }
+                },
                 checkOut(){
-
+                    this.checkOutCart = []
+                    this.checkOutInfo = {}
+                    for(var i=0; i<this.carts.length;i++){
+                        this.checkOutCart.push({
+                            bookId: this.carts[i].bookId,
+                            orderQuantity: this.carts[i].quantity,
+                            bookOwner: this.carts[i].bookOwner
+                        })
+                    }
+                    this.checkOutInfo = {
+                        buyer: this.userLogin.userId,
+                        bookList_String: JSON.stringify(this.checkOutCart),
+                        bookList: this.checkOutCart,
+                        total: this.totalPrice,
+                        buyerAddress: this.addressType=="old"?this.userLogin.address:this.newAddress,
+                    }
+                    addNewOrder(this.checkOutInfo).then((response)=>{
+                        if(response.data.indexOf("Error:")>=0){
+                            alert(response.data)
+                            location.reload()
+                        }else{
+                            this.cartStep++
+                        }
+                    })
                 },
                 minusQty(index){
                     if(this.carts[index].quantity-1 == 0){
@@ -361,7 +476,13 @@
                     if(already){
                         this.carts[alreadyInCartId].quantity = this.carts[alreadyInCartId].quantity+1
                     }else{
-                        this.carts.push({"bookId":book.bookId,"bookName":book.bookName,"quantity":1,"price":book.bookPrice})
+                        this.carts.push({
+                            "bookId":book.bookId,
+                            "bookName":book.bookName,
+                            "quantity":1,
+                            "price":book.bookPrice,
+                            "bookOwner":book.ownerId
+                        })
                     }
                     this.newBookInCart = true
                 },
@@ -386,6 +507,18 @@
                 closeAddBookModal(){
                     this.showAddBookModal = false
                 },
+                openBookDetailModal(book){
+                    getUserById(book.ownerId).then((response)=>{
+                        this.bookDetailOwner = response.data.username
+                    })
+                    this.showBookDetailModal = true
+                    this.bookDetail = book
+                },
+                closeBookDetailModal(){
+                    this.showBookDetailModal = false
+                    this.bookDetail = {}
+                    this.bookDetailOwner = ""
+                },
                 openCartModal(){
                     this.showCartModal = true;
                     this.newBookInCart = false;
@@ -393,6 +526,11 @@
                 closeCartModal(){
                     this.showCartModal = false
                     this.cartStep = 1
+                    this.addressError = false
+                    this.newAddress = ""
+                    this.addressType = "old"
+                    this.checkOutInfo = {}
+                    this.checkOutCart = []
                 },
                 openAddressModal(){
                     this.showAddressModal = true;
@@ -400,38 +538,8 @@
                 closeAddressModal(){
                     this.showAddressModal = false
                 },
-                allowedCheck(check){
-                    this.checkUserInfo = check
-                    console.log(this.checkUserInfo)
-                },
-                checkUserId(){
-                    if(localStorage.getItem("userInfo")!=null){
-                        this.userInfo = JSON.parse(localStorage.getItem("userInfo"))
-                        checkUser(this.userInfo).then((response)=>{
-                            // if(response.data.userId==this.userInfo.userId){
-                            //     console.log(response.data)
-                            // }else{
-                            //     alert("You need to login")
-                            //     localStorage.clear()
-                            //     window.location.href = "./views/loginView.html"
-                            // }
-                            this.allowedCheck(response.data)
-                        }).catch((e)=>{
-                            alert("2You need to login "+e)
-                            // localStorage.clear()
-                            // window.location.href = "./views/loginView.html"
-                        })
-                    }else{
-                        alert("3You need to login")
-                        // localStorage.clear()
-                        // window.location.href = "./views/loginView.html"
-                    }
-                },
             },
             created() {
-                // this.checkUserId();
-                // this.getMyBooks();
-                // this.getAllBooks();
                 this.getRole();
             }
         })

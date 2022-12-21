@@ -10,5 +10,7 @@ import java.util.List;
 public class CreateOrderRestModel {
     private String buyer;
     private List<UserOrderedEntity> bookList;
+    private String bookList_String;
+    private String buyerAddress;
     private BigDecimal total;
 }
