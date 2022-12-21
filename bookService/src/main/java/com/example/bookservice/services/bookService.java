@@ -3,16 +3,13 @@ package com.example.bookservice.services;
 import com.example.bookservice.command.EditBookCommand;
 import com.example.bookservice.core.BookEntity;
 import com.example.bookservice.core.data.BookRepository;
-import com.example.bookservice.core.event.BookEditedEvent;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,6 +17,7 @@ import java.util.List;
 public class bookService{
     @Autowired
     BookRepository bookRepository;
+
     private final CommandGateway commandGateway;
 
     @Autowired
@@ -100,4 +98,5 @@ public class bookService{
         res.put("status", "ok");
         return res;
     }
+
 }

@@ -75,7 +75,7 @@
             <artifactId>gson</artifactId>
             <version>2.9.0</version>
         </dependency>
-        <!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded &ndash;&gt;-->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>io.grpc</groupId>-->
 <!--            <artifactId>grpc-netty-shaded</artifactId>-->

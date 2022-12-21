@@ -35,12 +35,6 @@ public class BookAggregate {
         if(createBookCommand.getBookDescription() == null || createBookCommand.getBookDescription().isBlank()){
             throw new IllegalArgumentException("Description cannot be empty");
         }
-//        if(createBookCommand.getBookType() != "E-Book" || createBookCommand.getBookType() != "Book"){
-//            throw new IllegalArgumentException("Book Type not allowed (E-book, Book)");
-//        }
-//        if(createBookCommand.getCheckOutType() != "COD" || createBookCommand.getCheckOutType() != "Transfer"){
-//            throw new IllegalArgumentException("Transfer Type not allowed (Cash on Delivery, Transfer)");
-//        }
         if(createBookCommand.getBookPrice().compareTo(BigDecimal.ZERO) < 0){
             throw new IllegalArgumentException("Price cannot be less than zero");
         }
@@ -61,12 +55,6 @@ public class BookAggregate {
         if(editBookCommand.getBookDescription() == null || editBookCommand.getBookDescription().isBlank()){
             throw new IllegalArgumentException("Description cannot be empty");
         }
-//        if(createBookCommand.getBookType() != "E-Book" || createBookCommand.getBookType() != "Book"){
-//            throw new IllegalArgumentException("Book Type not allowed (E-book, Book)");
-//        }
-//        if(createBookCommand.getCheckOutType() != "COD" || createBookCommand.getCheckOutType() != "Transfer"){
-//            throw new IllegalArgumentException("Transfer Type not allowed (Cash on Delivery, Transfer)");
-//        }
         if(editBookCommand.getBookPrice().compareTo(BigDecimal.ZERO) < 0){
             throw new IllegalArgumentException("Price cannot be less than zero");
         }
