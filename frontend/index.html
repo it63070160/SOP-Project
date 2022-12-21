@@ -203,7 +203,8 @@
                 <ul id="navbar" >
                     <li><a id="homeNav" class="active" @click="goToHome">Home</a></li>
                     <li><a id="shopNav" @click="goToShop" >Shop</a></li>
-                    <li><a id="accountNav" href="login.html"><i class="fa-regular fa-user"></i></a></li>
+                    <li v-if="userLogin.role == 'Admin'"><a id="adminNav" href="/views/adminView.html">Admin</a></li>
+                    <li><a id="accountNav" href="/views/loginView.html"><i class="fa-regular fa-user"></i></a></li>
                     <li>
                         <a type="button" @click="openCartModal">
                             <i class="fa-solid fa-cart-shopping"></i>
@@ -222,6 +223,7 @@
         </section>
         <section id="product1" class="section-p1">
             <h1 v-if="userLogin.role=='User'">Ploikong Bookstore</h1>
+            <h1 v-if="userLogin.role=='Admin'">Ploikong Bookstore</h1>
             <h1 v-if="userLogin.role=='Merchant'">Ploikong Bookstore For Merchant</h1>
             <!-- <h2>New Release</h2> -->
             <div class="row row-cols-1 row-cols-md-5 g-5">
@@ -423,7 +425,7 @@
                         // localStorage.clear()
                         // window.location.href = "./views/loginView.html"
                     }
-                }
+                },
             },
             created() {
                 // this.checkUserId();
