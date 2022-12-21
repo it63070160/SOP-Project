@@ -13,11 +13,40 @@
     <script src="https://cdn.jsdelivr.net/npm/axios@1.2.0/dist/axios.min.js"></script>
     <script type="text/javascript" src="../js/UserService.js"></script>
     <script type="text/javascript" src="../js/AuthService.js"></script>
+    <style>
+        .btnregistar {
+          height: 100%;
+          width: 100%;
+          outline: none;
+          color: #fff;
+          border: none;
+          font-size: 18px;
+          font-weight: 5px;
+          border-radius: 5px;
+          letter-spacing: 1px;
+          background: linear-gradient(135deg, #71b7e6, #9b59b6);
+        }
+        .btnregistar:hover {
+          background: linear-gradient(-135deg, #71b7e6, #9b59b6);
+        }
+      </style>
 </head>
 <body>
-    <div class="container" id="app">
-        <div class="container w-25">
-            <h1 class="mb-3">Ploikong Bookstore</h1>
+    <section
+    class="vh-100 bg-image"
+    style="background-image: url('../pics/backgroundimage.png')"
+  >
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container h-100" id="app">
+        <div
+          class="row d-flex justify-content-center align-items-center h-100"
+        >
+          <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+            <div class="card" style="border-radius: 15px">
+              <div class="card-body p-5">
+            <h2 class="text-uppercase text-center mb-5">
+                Ploikong Bookstore
+              </h2>
             <div class="alert" :class="{ 'alert-primary': error==false, 'alert-danger': error, 'd-none': message=='' }" role="alert">
                 {{message}}
             </div>
@@ -30,25 +59,37 @@
                     <span class="input-group-text" id="basic-addon2"><i class="fa-solid fa-lock"></i></span>
                     <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="basic-addon2" v-model="password" required>
                 </div>
-                <button type="button" class="btn btn-success me-3" @click="login">Login</button>
-                <a href="./registerView.html"><button type="button" class="btn btn-secondary">Register</button></a>
+                <div class="d-flex justify-content-center">
+                <button type="button" class="btnregistar" @click="login">Login</button>
+            </div>
+                <p class="text-center text-muted mt-5 mb-0">
+                    New customer?
+                    <a href="./registerView.html" class="fw-bold text-body"
+                      ><u>Start here.</u></a
+                    >
+                  </p>
             </div>
         </div>
+      </div>
     </div>
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                username: "",
-                password: "",
-                message: "",
-                showAlert: false,
-                userInfo: {username:"", password:""},
-                accept: false,
-                error: false
-            },
-            methods:{
-                login(){
+  </div>
+</div>
+</div>
+</section>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            username: "",
+            password: "",
+            message: "",
+            showAlert: false,
+            userInfo: {username:"", password:""},
+            accept: false,
+            error: false
+        },
+        methods:{
+            login(){
                     if(this.username == "" || this.password == ""){
                         this.error = true
                         this.message = "Username or Password is incorrect"
@@ -87,7 +128,7 @@
             computed:{
                 
             }
-        })
-    </script>
+    })
+</script>
 </body>
 </html>
