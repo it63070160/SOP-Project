@@ -34,6 +34,10 @@ public class OrderCommandController {
                 .bookList(model.getBookList())
                 .total(model.getTotal())
                 .build();
+        HashMap<String, String> res = (HashMap<String, String>) rabbitTemplate.convertSendAndReceive("MyDirectExchange", "createOrder", model.getBookList());
+        if (res.get("status").equals("err")){
+            return "Cannot create order";
+        }
         String result;
         try{
             result = commandGateway.sendAndWait(command);
@@ -48,9 +52,10 @@ public class OrderCommandController {
         DeleteOrderCommand command = DeleteOrderCommand.builder()
                 .orderId(model.getId())
                 .build();
-        System.out.println(model);
-//        List<HashMap<String, String>> =
-//        rabbitTemplate.convertAndSend("MyDirectExchange", "deleteOrder", model.getBookList().toString());
+        HashMap<String, String> res = (HashMap<String, String>) rabbitTemplate.convertSendAndReceive("MyDirectExchange", "deleteOrder", model.getBookList());
+        if (res.get("status").equals("err")){
+            return "Cannot remove order : " + model.getId();
+        }
         String result;
         try{
             result = commandGateway.sendAndWait(command);
@@ -58,6 +63,5 @@ public class OrderCommandController {
             result = e.getLocalizedMessage();
         }
         return result;
-//        return "OK";
     }
 }

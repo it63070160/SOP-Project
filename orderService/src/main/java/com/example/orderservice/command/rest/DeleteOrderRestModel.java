@@ -7,5 +7,5 @@ import java.util.List;
 @Data
 public class DeleteOrderRestModel {
     private String id;
-    private List<UserOrderedEntity> bookList;
+    private String bookList;
 }
