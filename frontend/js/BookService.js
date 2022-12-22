@@ -15,3 +15,6 @@ function getUserBooks(userId){
 function addNewBook(bookInfo){
     return axios.post(BOOK_API_BASE_URL, bookInfo)
 }
+function getBookById(bookId){
+    return axios.get(BOOK_API_BASE_URL+"bookbybookid?id="+bookId)
+}

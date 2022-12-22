@@ -9,9 +9,6 @@ function editOrder(orderInfo){
 function deleteOrder(orderId){
     return axios.delete(ORDER_API_BASE_URL, {data: orderId});
 }
-function getUserOrders(userId){
-    return axios.get(ORDER_API_BASE_URL+userId);
-}
 function addNewOrder(orderInfo){
     return axios.post(ORDER_API_BASE_URL, orderInfo)
 }

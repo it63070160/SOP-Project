@@ -251,6 +251,7 @@
                 <ul id="navbar" >
                     <li id="textNav"><a id="homeNav" class="active" @click="goToHome">HOME</a></li>
                     <li id="textNav"><a id="shopNav" @click="goToShop" >SHOP</a></li>
+                    <li id="textNav"><a id="orderNav" href="/views/userOrderView.html">ORDERS</a></li>
                     <li v-if="userLogin.role == 'Admin'" id="textNav"><a id="adminNav" href="/views/adminView.html" target="_blank">ADMIN</a></li>
                     <li><a id="accountNav" href="/views/profileView.html"><i class="fa-regular fa-user"></i></a></li>
                     <li id="cart">
@@ -274,8 +275,8 @@
             <h1 v-if="userLogin.role=='Admin'">Ploikong Bookstore</h1>
             <h1 v-if="userLogin.role=='Merchant'">Ploikong Bookstore For Merchant</h1>
             <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role != 'Merchant'">
-                <div class="pro-container col" v-for="book in allBooks">
-                    <div class="pro" v-if="book.bookQuantity>0">
+                <div class="pro-container col" v-for="book in allBooks" v-if="book.bookQuantity>0">
+                    <div class="pro">
                         <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
                         <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
                         <div class="des" @click="openBookDetailModal(book)">
