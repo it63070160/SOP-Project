@@ -13,4 +13,6 @@ public class CreateOrderRestModel {
     private String bookList_String;
     private String buyerAddress;
     private BigDecimal total;
+    private String email;
+    private List<MailSenderRestModel> bookListMail;
 }

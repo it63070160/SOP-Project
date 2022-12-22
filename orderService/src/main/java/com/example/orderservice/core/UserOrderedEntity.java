@@ -1,6 +1,5 @@
 package com.example.orderservice.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;

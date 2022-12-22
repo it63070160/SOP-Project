@@ -69,6 +69,10 @@
             <artifactId>spring-rabbit</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/io.grpc/grpc-netty-shaded &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>io.grpc</groupId>-->

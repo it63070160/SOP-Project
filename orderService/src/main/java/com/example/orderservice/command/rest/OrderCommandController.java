@@ -2,6 +2,7 @@ package com.example.orderservice.command.rest;
 
 import com.example.orderservice.command.CreateOrderCommand;
 import com.example.orderservice.command.DeleteOrderCommand;
+import com.example.orderservice.services.EmailSenderService;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -20,6 +21,9 @@ public class OrderCommandController {
 
     @Autowired
     RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @Autowired
     public OrderCommandController(CommandGateway commandGateway) {
@@ -45,6 +49,7 @@ public class OrderCommandController {
         }catch (Exception e){
             result = e.getLocalizedMessage();
         }
+        emailSenderService.sendEmail(model.getEmail(), "Order create completed", model, command);
         return result;
     }
 
