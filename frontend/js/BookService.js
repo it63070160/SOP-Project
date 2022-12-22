@@ -15,6 +15,3 @@ function getUserBooks(userId){
 function addNewBook(bookInfo){
     return axios.post(BOOK_API_BASE_URL, bookInfo)
 }
-// function deleteBook(){
-//     return axios.delete(BOOK_API_BASE_URL);
-// }

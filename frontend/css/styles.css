@@ -16,6 +16,27 @@
     text-align: center;
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #9b59b6;
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #71b7e6;
+    height: 2px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #9b59b6; 
+  }
+
 @import url('https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap');
 *{
     margin: 0;
@@ -60,12 +81,75 @@ body{
     align-items: center;
     justify-content: space-between;
     padding: 20px 80px;
-    background: #E3E6F3;
+    background-size: cover;
+    background-image: url('../pics/backgroundimage.png');
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
     z-index: 999;
 }
 #header a:hover{
     cursor: pointer;
+}
+.rainbow {
+    /* Font options */
+   font-family: 'Pacifico', cursive;
+   text-shadow: 2px 2px 4px #000000;
+   font-size:30px;
+    /* Chrome, Safari, Opera */
+   -webkit-animation: rainbow 5s infinite; 
+   /* Internet Explorer */
+   -ms-animation: rainbow 5s infinite;
+   /* Standar Syntax */
+   animation: rainbow 5s infinite; 
+ }
+
+ @keyframes scale{
+    0%{transform: scale(100%);}
+    50%{transform: scale(200%);}
+    100%{transform: scale(100%);}
+ }
+ /* Chrome, Safari, Opera */
+ @-webkit-keyframes rainbow{
+    0%{color: orange;}	
+    10%{color: purple;}	
+    20%{color: red;}
+    30%{color: CadetBlue;}
+    40%{color: yellow;}
+    50%{color: coral;}
+    60%{color: green;}
+    70%{color: cyan;}
+    80%{color: DeepPink;}
+    90%{color: DodgerBlue;}
+    100%{color: orange;}
+ }
+
+ /* Internet Explorer */
+ @-ms-keyframes rainbow{
+    0%{color: orange;}	
+    10%{color: purple;}	
+    20%{color: red;}
+    30%{color: CadetBlue;}
+    40%{color: yellow;}
+    50%{color: coral;}
+    60%{color: green;}
+    70%{color: cyan;}
+    80%{color: DeepPink;}
+    90%{color: DodgerBlue;}
+    100%{color: orange;}
+ }
+
+ /* Standar Syntax */
+ @keyframes rainbow{
+    0%{color: orange;}	
+    10%{color: purple;}	
+    20%{color: red;}
+    30%{color: CadetBlue;}
+    40%{color: yellow;}
+    50%{color: coral;}
+    60%{color: green;}
+    70%{color: cyan;}
+    80%{color: DeepPink;}
+    90%{color: DodgerBlue;}
+    100%{color: orange;}
 }
 #navbar{
     display: flex;
@@ -86,15 +170,15 @@ body{
 }
 #navbar li a:hover,
 #navbar li a.active{
- color: #088178;
+ color: #E3E6F3;
  cursor: pointer;
 }
-#navbar li a.active::after,
-#navbar li a:hover::after{
+#navbar li#textNav a.active::after,
+#navbar li#textNav a:hover::after{
     content:"";
     width: 30px;
     height: 2px;
-    background: #088178;
+    background: #71b7e6;
     position: absolute;
     bottom: -4px;
     left: 20px;
@@ -102,7 +186,7 @@ body{
 
 #hero{
     background-image: url("../pics/ChristmasBG.jpg");
-    height: 90vh;
+    height: 100%;
     width: 100%;
     background-size: cover;
     background-position: top 25% right 0;
@@ -143,7 +227,7 @@ body{
     width: 13%;
     min-width: 250px;
     padding: 10px 12px;
-    border: 1px solid #cce7d0;
+    border: 1px solid #71b7e6;
     border-radius: 25px;
     cursor: pointer;
     box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.02);
@@ -178,7 +262,7 @@ body{
     padding-top: 7px;
     font-size: 15px;
     font-weight: 700;
-    color: #088178;
+    color: #9b59b6;
 }
 #product1 .pro .des del{
     padding-top: 7px;
@@ -192,13 +276,13 @@ body{
     height: 40px;
     line-height: 40px;
     border-radius: 50px;
-    background-color: #e8f6ea;
+    background-color: #71b7e6;
     font-weight: 500;
-    color: #088178;
-    border: 1px solid #cce7d0;
+    color: #0a8ce2;
+    border: 1px solid #43a2e0;
 }
 #product1 .pro .custom-class:hover{
-    background-color: #b6c2b8;
+    background-color: #90c3e6;
 }
 .price{
     justify-content: space-between;

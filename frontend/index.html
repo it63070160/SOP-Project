@@ -19,6 +19,12 @@
 </head>
 <body>
     <div id="app" style="margin: 0;">
+        <!-- Notification Coming Soon-->
+        <div class="position-fixed top-0" style="margin-top: 5%; margin-left: 40%; z-index: 10;">
+            <div class="alert alert-danger" :class="{'d-none':error==false, 'd-block':error}" role="alert">
+                {{errorMessage}} (restart in {{reloadCount}} sec)
+            </div>
+        </div>
         <!-- Book Edit Modal -->
         <div v-show="showEditBookModal" class="modal fade" :class="{ show: showEditBookModal, 'd-block': showEditBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -46,11 +52,11 @@
                                 <label for="type">Edit Type</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input v-model="eQuantity" id="quantity" class="form-control">
+                                <input type="number" min="0" step="1" v-model="eQuantity" id="quantity" class="form-control">
                                 <label for="quantity">Edit Quantity</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input v-model="ePrice" id="price" class="form-control">
+                                <input type="number" min="0" step="0.01" v-model="ePrice" id="price" class="form-control">
                                 <label for="price">Edit Price</label>
                             </div>
                             <div class="form-floating mb-3">
@@ -105,17 +111,17 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
                             <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">2</button>
                             <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">3</button>
                         </div>
                         <div v-for="(cart, index) in carts" class="mb-5">
                             {{cart.bookName}}
                             <div class="btn-group float-end">
-                                <button type="button" @click="minusQty(index)" class="btn btn-outline-success"><i class="fa-solid fa-minus"></i></button>
+                                <button type="button" @click="minusQty(index)" class="btn btn-outline-primary"><i class="fa-solid fa-minus"></i></button>
                                 <input type="button" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                                <label class="btn btn-outline-success" for="btnradio2">{{cart.quantity}}</label>
-                                <button type="button" @click="plusQty(index)" class="btn btn-outline-success"><i class="fa-solid fa-plus"></i></button>
+                                <label class="btn btn-outline-primary" for="btnradio2">{{cart.quantity}}</label>
+                                <button type="button" @click="plusQty(index)" class="btn btn-outline-primary"><i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
                         <p v-if="carts.length>0" class="float-end">Total : {{total}}฿</p>
@@ -126,14 +132,15 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">2</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
                             <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
                             <div class="card h-50 mb-5" v-if="userLogin.address.length>0">
                                 <div class="card-header">
                                     Your Address
+                                    <input class="form-check-input mt-1 float-end" type="radio" value="old" v-model="addressType" aria-label="Checkbox for following text input">
                                 </div>
                                 <div class="card-body">
                                     <div class="card-text">
@@ -142,23 +149,25 @@
                                 </div>
                             </div>
                             <div class="card h-50 mb-5">
-                                <div class="form-floating">
-                                    <textarea class="form-control" :class="{'is-invalid': addressError}" placeholder="New address here" id="validationTextarea" style="height: 100px" v-model="newAddress" required></textarea>
-                                    <div class="invalid-feedback">
-                                        Please enter a new address.
-                                    </div>
-                                    <label for="floatingTextarea2">New Address</label>
+                                <div class="card-header">
+                                    New Address
+                                    <input class="form-check-input mt-1 float-end" type="radio" value="new" v-model="addressType" aria-label="Checkbox for following text input">
                                 </div>
-                                <button class="btn btn-success" @click="saveNewAddress" v-if="savingAddress==-1">Save new address</button>
-                                <button class="btn btn-secondary" v-if="savingAddress==0" disabled>Loading . . .</button>
-                                <button class="btn btn-outline-success" v-if="savingAddress==1"><i class="fa-solid fa-check"></i></button>
-                                <button class="btn btn-outline-danger" v-if="savingAddress==2"><i class="fa-solid fa-xmark"></i></button>
+                                <div class="card-body">
+                                    <div class="input-group mb-3">
+                                        <textarea class="form-control" :class="{'is-invalid': addressError}" placeholder="New address here" id="validationTextarea" style="height: 100px" v-model="newAddress" required></textarea>
+                                        <!-- <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"> -->
+                                        <button class="btn btn-success" @click="saveNewAddress" v-if="savingAddress==-1">Save</button>
+                                        <button class="btn btn-secondary" v-if="savingAddress==0" disabled>. . .</button>
+                                        <button class="btn btn-outline-success" v-if="savingAddress==1"><i class="fa-solid fa-check"></i></button>
+                                        <button class="btn btn-outline-danger" v-if="savingAddress==2"><i class="fa-solid fa-xmark"></i></button>
+                                        <div class="invalid-feedback">
+                                            Please enter a new address.
+                                        </div>
+                                      </div>
+                                    
+                                </div>
                             </div>
-
-                            <select class="form-select" v-model="addressType" required>
-                                <option value="old" selected>Your Address</option>
-                                <option value="new">New Address (without save)</option>
-                            </select>
                         </div>
                     </div>
                     <div class="modal-body" v-if="cartStep==3" style="text-align: left;">
@@ -166,9 +175,9 @@
                             <div class="progress" style="height: 1px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #e8f6ea; cursor:context-menu">3</button>
+                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
+                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
+                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
                             <div class="card h-50">
@@ -200,15 +209,15 @@
                         Your order was confirmed ! Thank for purchased
                     </div>
                     <div class="modal-footer" v-if="cartStep==1">
-                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Close</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==2">
-                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="checkAddress">Next</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="checkAddress">Next</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==3">
-                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="checkOut">Check Out</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="checkOut">Check Out</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==4">
@@ -225,28 +234,27 @@
                         <h1 class="modal-title fs-5" id="bookDetailModalLabel">{{bookDetail.bookName}}</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeBookDetailModal"></button>
                     </div>
-                    <div class="modal-body" v-if="cartStep==1" style="text-align: left;">
+                    <div class="modal-body" style="text-align: left;">
                         <p>Book Description : {{bookDetail.bookDescription}}</p>
                         <p>Book Type : {{bookDetail.bookType}}</p>
                         <p>Book Price : {{bookDetail.bookPrice}}</p>
                         <p>Book Owner : {{bookDetailOwner}}</p>
                     </div>
-                    <div class="modal-footer" v-if="cartStep==1">
-                        <button type="button" class="btn" style="background-color:#cce7d0" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeBookDetailModal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
         <section id="header" style="position: relative; width: 100%;">
-            <a @click="goToHome"><img src="/pics/download.png" class="logo" alt=""  width="200 " height="50"></a>
+            <a @click="goToHome"><h3 class="rainbow">Ploikong Bookstore</h3></a>
             <div>
                 <ul id="navbar" >
-                    <li><a id="homeNav" class="active" @click="goToHome">Home</a></li>
-                    <li><a id="shopNav" @click="goToShop" >Shop</a></li>
-                    <li v-if="userLogin.role == 'Admin'"><a id="adminNav" href="/views/adminView.html" target="_blank">Admin</a></li>
+                    <li id="textNav"><a id="homeNav" class="active" @click="goToHome">HOME</a></li>
+                    <li id="textNav"><a id="shopNav" @click="goToShop" >SHOP</a></li>
+                    <li v-if="userLogin.role == 'Admin'" id="textNav"><a id="adminNav" href="/views/adminView.html" target="_blank">ADMIN</a></li>
                     <li><a id="accountNav" href="/views/profileView.html"><i class="fa-regular fa-user"></i></a></li>
-                    <li>
+                    <li id="cart">
                         <a type="button" @click="openCartModal">
                             <i class="fa-solid fa-cart-shopping"></i>
                             <span v-if="newBookInCart" class="position-absolute top-0 start-70 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">new book in cart</span></span>
@@ -266,16 +274,15 @@
             <h1 v-if="userLogin.role=='User'">Ploikong Bookstore</h1>
             <h1 v-if="userLogin.role=='Admin'">Ploikong Bookstore</h1>
             <h1 v-if="userLogin.role=='Merchant'">Ploikong Bookstore For Merchant</h1>
-            <!-- <h2>New Release</h2> -->
             <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role != 'Merchant'">
                 <div class="pro-container col" v-for="book in allBooks">
                     <div class="pro">
                         <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
                         <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
                         <div class="des" @click="openBookDetailModal(book)">
-                            <h6 style="font-weight: bold;">{{book.bookName}}</h5>
-                            <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h6>
-                            <h5 v-else>{{book.bookDescription}}</h6>
+                            <h6 style="font-weight: bold;">{{book.bookName}}</h6>
+                            <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h5>
+                            <h5 v-else>{{book.bookDescription}}</h5>
                             <h4>{{book.bookPrice}}฿ ({{book.bookQuantity}} left)</h4>
                         </div>
                         <button class="custom-class" @click="addToCart(book)"><i class="fa-sharp fa-solid fa-cart-shopping" ></i></button>
@@ -283,8 +290,7 @@
                 </div>
             </div>
             <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role == 'Merchant'">
-                <h3 v-if="merchantBook == 0">No Data</h3>
-                <div class="pro-container col" v-else v-for="book in allBooks" v-show="book.ownerId == userLogin.userId">
+                <div class="pro-container col" v-for="book in myBooks" v-show="book.ownerId == userLogin.userId">
                     <div class="pro">
                         <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
                         <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
@@ -348,23 +354,15 @@
         var app = new Vue({
             el: '#app',
             data: {
-                message: "",
+                errorMessage: "",
                 userInfo: "",
-                bookName: "",
-                bookDesc: "",
-                bookType: "Book",
-                bookQty: 1,
-                bookPrice: 0.00,
-                checkoutType: "Cash on Delivery",
-                ownerId: "",
                 bookDetail: {},
                 bookDetailOwner: "",
-                showAlert: false,
                 showAddBookModal : false,
                 showCartModal: false,
                 showBookDetailModal: false,
+                showdeleteBookModal: false,
                 cartStep: 1,
-                checkUserInfo: {},
                 error: false,
                 newBookInCart: false,
                 myBooks: [],
@@ -395,7 +393,6 @@
                 eDescription : "",
                 showEditBookModal : false,
                 bookInfo : [], // model in Edit
-                merchantBook : 0,
                 createBookInfo: {
                     Name: "",
                     Desc: "",
@@ -407,6 +404,7 @@
                 },
                 createBookNameError: false,
                 checkOutBook : [],
+                reloadCount: 3,
             },
             computed:{
                 total(){
@@ -430,7 +428,11 @@
                         getUser(token).then((response)=> {
                             getUserById(response.data.id).then(response => {
                                 this.userLogin = response.data
-                                this.getAllBooks();
+                                if(this.userLogin.role=='User' || this.userLogin.role=='Admin'){
+                                    this.getAllBooks();
+                                }else if(this.userLogin.role=='Merchant'){
+                                    this.getMyBooks();
+                                }
                             }).catch(err => {
                                 console.log(err)
                                 alert("Please login again");
@@ -446,22 +448,13 @@
                     }
                 },
                 getMyBooks(){
-                    getUserBooks(this.ownerId).then((response)=>{
+                    getUserBooks(this.userLogin.userId).then((response)=>{
                         this.myBooks = response.data
-                    }).catch((e)=>{
-                        alert("You need to login")
-                        localStorage.clear()
-                        window.location.href = "./views/loginView.html"
                     })
                 },
                 getAllBooks(){
                     getBooks().then((response)=>{
                         this.allBooks = response.data;
-                        for(let i = 0; i<this.allBooks.length; i++){
-                            if (this.allBooks[i].ownerId == this.userLogin.userId){
-                                this.merchantBook += 1
-                            }
-                        }
                     })
                 },
                 plusQty(index){
@@ -481,7 +474,7 @@
                         this.savingAddress = 0
                         setTimeout(()=>{
                             this.savingAddress = -1
-                        }, 5000)
+                        }, 3000)
                         this.userLogin.address = this.newAddress
                         this.userInfo = {
                             id:this.userLogin.userId ,
@@ -494,11 +487,11 @@
                         editUser(this.userInfo).then((response)=>{
                             setTimeout(()=>{
                                 this.savingAddress = 1
-                            }, 3000)
+                            }, 2000)
                         }).catch((error)=>{
                             setTimeout(()=>{
                                 this.savingAddress = 2
-                            }, 3000)
+                            }, 2000)
                         });
                     }else{
                         this.addressError = true
@@ -530,8 +523,14 @@
                     }
                     addNewOrder(this.checkOutInfo).then((response)=>{
                         if(response.data.indexOf("Error:")>=0){
-                            alert(response.data)
-                            location.reload()
+                            this.errorMessage = response.data
+                            this.error = true
+                            setInterval(()=>{
+                                this.reloadCount--
+                            }, 1000)
+                            setTimeout(()=>{
+                                location.reload()
+                            }, 3000)
                         }else{
                             this.cartStep++
                         }
@@ -570,28 +569,29 @@
                             "bookOwner":book.ownerId
                         })
                     }
+                    setTimeout(() => {
+                        document.getElementById('cart').style = "animation: none"
+                    }, 500);
+                    document.getElementById('cart').style = "animation: scale .5s linear"
                     this.newBookInCart = true
                 },
                 addBook(){
-                    this.newBookInfo = {
-                        bookName: this.bookName,
-                        bookDescription: this.bookDesc,
-                        bookType: this.bookType,
-                        bookQuantity: parseInt(this.bookQty),
-                        bookPrice: parseFloat(this.bookPrice),
-                        checkOutType: this.checkoutType,
-                        ownerId: this.userLogin.userId
+                    if(this.createBookInfo.Name.length<=0){
+                        this.createBookNameError = true
+                    }else{
+                        this.newBookInfo = {
+                            bookName: this.createBookInfo.Name,
+                            bookDescription: this.createBookInfo.Desc,
+                            bookType: this.createBookInfo.Type,
+                            bookQuantity: parseInt(this.createBookInfo.Qty),
+                            bookPrice: parseFloat(this.createBookInfo.Price),
+                            checkOutType: this.createBookInfo.checkOut,
+                            ownerId: this.userLogin.userId
+                        }
+                        addNewBook(this.newBookInfo).then((response)=>{
+                            location.reload()
+                        })
                     }
-                    addNewBook(this.newBookInfo).then((response)=>{
-                        this.closeAddBookModal()
-                        location.reload()
-                    })
-                },
-                openAddBookModal(){
-                    this.showAddBookModal = true;
-                },
-                closeAddBookModal(){
-                    this.showAddBookModal = false
                 },
                 openBookDetailModal(book){
                     getUserById(book.ownerId).then((response)=>{
@@ -604,6 +604,7 @@
                     this.showBookDetailModal = false
                     this.bookDetail = {}
                     this.bookDetailOwner = ""
+                    this.merchantEdit = false
                 },
                 openCartModal(){
                     this.showCartModal = true;
@@ -617,12 +618,6 @@
                     this.addressType = "old"
                     this.checkOutInfo = {}
                     this.checkOutCart = []
-                },
-                openAddressModal(){
-                    this.showAddressModal = true;
-                },
-                closeAddressModal(){
-                    this.showAddressModal = false
                 },
                 openModalEditBook(book){
                     this.showEditBookModal = true
@@ -681,24 +676,6 @@
                         console.log(error)
                         this.showdeleteBookModal = false
                     })
-                },
-                addBook(){
-                    if(this.createBookInfo.Name.length<=0){
-                        this.createBookNameError = true
-                    }else{
-                        this.newBookInfo = {
-                            bookName: this.createBookInfo.Name,
-                            bookDescription: this.createBookInfo.Desc,
-                            bookType: this.createBookInfo.Type,
-                            bookQuantity: parseInt(this.createBookInfo.Qty),
-                            bookPrice: parseFloat(this.createBookInfo.Price),
-                            checkOutType: this.createBookInfo.checkOut,
-                            ownerId: this.userLogin.userId
-                        }
-                        addNewBook(this.newBookInfo).then((response)=>{
-                            location.reload()
-                        })
-                    }
                 },
             },
             created() {

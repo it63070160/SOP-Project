@@ -130,11 +130,11 @@
                                 <label for="type">Edit Type</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input v-model="eQuantity" id="quantity" class="form-control">
+                                <input type="number" min="0" v-model="eQuantity" id="quantity" class="form-control">
                                 <label for="quantity">Edit Quantity</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input v-model="ePrice" id="price" class="form-control">
+                                <input type="number" step="0.01" v-model="ePrice" id="price" class="form-control">
                                 <label for="price">Edit Price</label>
                             </div>
                             <div class="form-floating mb-3">
@@ -403,10 +403,8 @@
             el: '#app',
             data: {
                 books : [],
-                newbooks : [],
                 users : [],
                 orders : [],
-                newbooksAvailable : false,
                 showInfoModal : false,
                 showAddBookModal : false,
                 bookInModal : [], // book model in Info
@@ -646,9 +644,7 @@
                     this.eBookList = order.bookList
                 },
                 deleteOrder(){
-                    console.log("delete order : " + this.eId)
                     deleteOrder({id : this.eId, bookList: JSON.stringify(this.eBookList)}).then((response)=>{
-                        console.log(response)
                         this.showdeleteOrderModal = false
                         if(response.data.indexOf("Cannot") != -1){
                             alert(response.data)
@@ -663,9 +659,6 @@
                 },
             },
             created() {
-                // this.getAllBooks();
-                // this.getAllUsers();
-                // this.getAllOrders();
                 this.getRole();
             }
         })

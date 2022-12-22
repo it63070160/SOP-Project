@@ -18,6 +18,3 @@ function addNewOrder(orderInfo){
 function userGetOrders(userId){
     return axios.get(ORDER_API_BASE_URL + "orderbybuyer?id=" + userId)
 }
-// function deleteOrder(){
-//     return axios.delete(ORDER_API_BASE_URL);
-// }
