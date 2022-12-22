@@ -19,6 +19,79 @@
 </head>
 <body>
     <div id="app" style="margin: 0;">
+        <!-- Book Edit Modal -->
+        <div v-show="showEditBookModal" class="modal fade" :class="{ show: showEditBookModal, 'd-block': showEditBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Book</h1>
+                        <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                    </div>
+                    <div class="modal-body" style="text-align:left">
+                        <div class="form-group">
+                            <div class="form-floating mb-3">
+                                <input v-model="eName" id="name" class="form-control">
+                                <label for="name">Edit Book Name</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input v-model="eDescription" id="description" class="form-control">
+                                <label for="description">Edit Description</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="eType">
+                                    <option value="Book">Book</option>
+                                    <option value="E-Book">E-Book</option>
+                                </select>
+                                <label for="type">Edit Type</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input v-model="eQuantity" id="quantity" class="form-control">
+                                <label for="quantity">Edit Quantity</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input v-model="ePrice" id="price" class="form-control">
+                                <label for="price">Edit Price</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="eCheckoutType">
+                                    <option value="Cash on Delivery" selected>Cash on Delivery</option>
+                                    <option value="Transfer" disabled>Transfer (Coming Soon)</option>
+                                </select>
+                                <label for="checkoutType">Edit Checkout Type</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input v-model="eOwnerId" id="ownerId" class="form-control" readonly disabled>
+                                <label for="ownerId">Edit Owner ID</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveBook">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Book Delete Modal -->
+        <div v-show="showdeleteBookModal" class="modal fade" :class="{ show: showdeleteBookModal, 'd-block': showdeleteBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Book</h1>
+                        <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                    </div>
+                    <div class="modal-body" style="text-align:left">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteBook">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Cart Modal -->
         <div v-show="showCartModal" class="modal fade" :class="{ show: showCartModal, 'd-block': showCartModal }" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -194,7 +267,7 @@
             <h1 v-if="userLogin.role=='Admin'">Ploikong Bookstore</h1>
             <h1 v-if="userLogin.role=='Merchant'">Ploikong Bookstore For Merchant</h1>
             <!-- <h2>New Release</h2> -->
-            <div class="row row-cols-1 row-cols-md-5 g-5">
+            <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role != 'Merchant'">
                 <div class="pro-container col" v-for="book in allBooks">
                     <div class="pro">
                         <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
@@ -209,6 +282,65 @@
                     </div>
                 </div>
             </div>
+            <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role == 'Merchant'">
+                <h3 v-if="merchantBook == 0">No Data</h3>
+                <div class="pro-container col" v-else v-for="book in allBooks" v-show="book.ownerId == userLogin.userId">
+                    <div class="pro">
+                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <div class="des" @click="openBookDetailModal(book)">
+                            <h6 style="font-weight: bold;">{{book.bookName}}</h5>
+                            <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h6>
+                            <h5 v-else>{{book.bookDescription}}</h6>
+                            <h4>{{book.bookPrice}}฿ ({{book.bookQuantity}} left)</h4>
+                        </div>
+                        <button type="button" class="btn btn-warning" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalEditBook(book)"><i class="fa-regular fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalDeleteBook(book)"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="pro-container col" style="height: 50px;">
+                    <div class="pro">
+                        <img v-if="createBookInfo.Type=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="createBookInfo.Type=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <div class="des">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" :class="{'is-invalid':createBookNameError}" id="createName" v-model="createBookInfo.Name" placeholder="your book name">
+                                <label for="floatingInput">Name</label>
+                                <div class="invalid-feedback">
+                                    Please enter book name.
+                                </div>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" placeholder="your book description" id="floatingTextarea" v-model="createBookInfo.Desc"></textarea>
+                                <label for="floatingTextarea">Description</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.Type" aria-label="Floating label select example">
+                                    <option value="Book" selected>Book</option>
+                                    <option value="E-Book">E-Book</option>
+                                </select>
+                                <label for="floatingSelect">Type</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" id="floatingInput" min="1" v-model="createBookInfo.Qty" required>
+                                <label for="floatingInput" class="col-sm-2 col-form-label">Quantity</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="number" step="0.01" class="form-control" id="floatingInput" min="0" v-model="createBookInfo.Price" required>
+                                <label for="floatingInput" class="col-sm-2 col-form-label">Price</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.checkOut" aria-label="Floating label select example">
+                                <option value="Cash on Delivery" selected>Cash on Delivery</option>
+                                <option value="Transfer" disabled>Transfer (Coming Soon)</option>
+                                </select>
+                                <label for="floatingSelect">Checkout Type</label>
+                            </div>
+                        </div>
+                        <button class="custom-class" @click="addBook"><i class="fa-sharp fa-solid fa-plus" ></i></button>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
 
@@ -220,10 +352,10 @@
                 userInfo: "",
                 bookName: "",
                 bookDesc: "",
-                bookType: "E-Book",
+                bookType: "Book",
                 bookQty: 1,
                 bookPrice: 0.00,
-                checkoutType: "Cash On Delivery",
+                checkoutType: "Cash on Delivery",
                 ownerId: "",
                 bookDetail: {},
                 bookDetailOwner: "",
@@ -252,7 +384,28 @@
                 addressType: "old",
                 addressError: false,
                 checkOutCart: [],
-                checkOutInfo: {}
+                checkOutInfo: {},
+                eId : "",
+                eName : "",
+                eType : "",
+                eQuantity : 0,
+                ePrice : 0.00,
+                eCheckoutType : "Cash on Delivery",
+                eOwnerId : "",
+                eDescription : "",
+                showEditBookModal : false,
+                bookInfo : [], // model in Edit
+                merchantBook : 0,
+                createBookInfo: {
+                    Name: "",
+                    Desc: "",
+                    Type: "Book",
+                    Qty: 1,
+                    Price: 0.00,
+                    checkOut: "Cash on Delivery",
+                    ownerId: "",
+                },
+                createBookNameError: false,
             },
             computed:{
                 total(){
@@ -303,6 +456,11 @@
                 getAllBooks(){
                     getBooks().then((response)=>{
                         this.allBooks = response.data;
+                        for(let i = 0; i<this.allBooks.length; i++){
+                            if (this.allBooks[i].ownerId == this.userLogin.userId){
+                                this.merchantBook += 1
+                            }
+                        }
                     })
                 },
                 plusQty(index){
@@ -414,7 +572,7 @@
                         bookQuantity: parseInt(this.bookQty),
                         bookPrice: parseFloat(this.bookPrice),
                         checkOutType: this.checkoutType,
-                        ownerId: this.ownerId
+                        ownerId: this.userLogin.userId
                     }
                     addNewBook(this.newBookInfo).then((response)=>{
                         this.closeAddBookModal()
@@ -457,6 +615,82 @@
                 },
                 closeAddressModal(){
                     this.showAddressModal = false
+                },
+                openModalEditBook(book){
+                    this.showEditBookModal = true
+                    this.eId = book.bookId
+                    this.eName = book.bookName
+                    this.eType = book.bookType
+                    this.eQuantity = book.bookQuantity
+                    this.ePrice = book.bookPrice
+                    this.eCheckoutType = book.checkOutType
+                    this.eOwnerId = book.ownerId
+                    this.eDescription = book.bookDescription
+                },
+                saveBook(){
+                    this.bookInfo = {
+                        bookId: this.eId, 
+                        bookName: this.eName, 
+                        bookDescription: this.eDescription, 
+                        bookType : this.eType, 
+                        bookQuantity: this.eQuantity, 
+                        bookPrice: this.ePrice, 
+                        checkOutType: this.eCheckoutType, 
+                        ownerId: this.eOwnerId
+                    }
+                    editBook(this.bookInfo).then((response)=>{
+                        this.showEditBookModal = false
+                        location.reload()
+                    }).catch((error)=>{
+                        console.log(error)
+                        this.showEditBookModal = false
+                    });
+                },
+                closeModal(){
+                    this.showEditBookModal = false
+                    this.showAddBookModal = false
+                    this.showdeleteBookModal = false
+
+                    this.eId = ""
+                    this.eName = ""
+                    this.eDescription = ""
+                    this.eType = ""
+                    this.eQuantity = 1
+                    this.ePrice = 0.00
+                    this.eCheckoutType = "Cash on Delivery"
+                    this.eOwnerId = ""
+                },
+                openModalDeleteBook(book){
+                    this.eId = book.bookId;
+                    this.showdeleteBookModal = true;
+                },
+                deleteBook(){
+                    deleteBook({id : this.eId}).then((response)=>{
+                        console.log(response)
+                        this.showdeleteBookModal = false
+                        location.reload()
+                    }).catch((error)=>{
+                        console.log(error)
+                        this.showdeleteBookModal = false
+                    })
+                },
+                addBook(){
+                    if(this.createBookInfo.Name.length<=0){
+                        this.createBookNameError = true
+                    }else{
+                        this.newBookInfo = {
+                            bookName: this.createBookInfo.Name,
+                            bookDescription: this.createBookInfo.Desc,
+                            bookType: this.createBookInfo.Type,
+                            bookQuantity: parseInt(this.createBookInfo.Qty),
+                            bookPrice: parseFloat(this.createBookInfo.Price),
+                            checkOutType: this.createBookInfo.checkOut,
+                            ownerId: this.userLogin.userId
+                        }
+                        addNewBook(this.newBookInfo).then((response)=>{
+                            location.reload()
+                        })
+                    }
                 },
             },
             created() {
