@@ -58,9 +58,6 @@ public class BookAggregate {
         if(editBookCommand.getBookPrice().compareTo(BigDecimal.ZERO) < 0){
             throw new IllegalArgumentException("Price cannot be less than zero");
         }
-        if(editBookCommand.getBookQuantity() <= 0){
-            throw new IllegalArgumentException("Quantity cannot be less than or equal to zero");
-        }
 
         BookEditedEvent bookEditedEvent = new BookEditedEvent();
         BeanUtils.copyProperties(editBookCommand, bookEditedEvent);
