@@ -29,4 +29,12 @@ public class BookQueryHandler {
         }
         return booksRest;
     }
+
+    @QueryHandler
+    BookRestModel findBookById(FindBookByIdQuery query){
+        BookEntity book = bookRepository.findByBookId(query.getId());
+        BookRestModel bookRestModel = new BookRestModel();
+        BeanUtils.copyProperties(book, bookRestModel);
+        return bookRestModel;
+    }
 }
