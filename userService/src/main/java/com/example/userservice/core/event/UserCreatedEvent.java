@@ -2,8 +2,6 @@ package com.example.userservice.core.event;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-
 @Data
 public class UserCreatedEvent {
     private String userId;

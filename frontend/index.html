@@ -18,86 +18,6 @@
     <script type="text/javascript" src="../js/main.js"></script>
 </head>
 <body>
-    <!-- <div id="app" class="container"> -->
-        <!-- Cart Modal -->
-        <!-- <div v-show="showCartModal" class="modal fade" :class="{ show: showCartModal, 'd-block': showCartModal }" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="cartModalLabel">Carts</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeCartModal"></button>
-                    </div>
-                    <div class="modal-body" v-if="cartStep==1" style="text-align: left;">
-                        <div class="position-relative m-4 mb-5">
-                            <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
-                        </div>
-                        <div v-for="(cart, index) in carts" class="mb-5">
-                            {{cart.bookName}}
-                            <div class="btn-group float-end">
-                                <button type="button" @click="minusQty(index)" class="btn btn-outline-primary float-right"><i class="fa-solid fa-minus"></i></button>
-                                <input type="button" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                                <label class="btn btn-outline-primary" for="btnradio2">{{cart.quantity}}</label>
-                                <button type="button" @click="plusQty(index)" class="btn btn-outline-primary"><i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>
-                        <p v-if="carts.length>0" class="float-end">Total : {{total}}</p>
-                        <p v-if="carts.length==0" style="text-align: center;">Cart is empty</p>
-                    </div>
-                    <div class="modal-body" v-if="cartStep==2" style="text-align: left;">
-                        <div class="position-relative m-4 mb-5">
-                            <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;" disabled>2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;" disabled>3</button>
-                        </div>
-                        <div class="mb-5">
-                            Address
-                        </div>
-                    </div>
-                    <div class="modal-footer" v-if="cartStep==1">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Cancel</button>
-                    </div>
-                    <div class="modal-footer" v-if="cartStep>1">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @click="cartStep++">Next</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <h1>Ploikong Bookstore</h1>
-        <div class="position-fixed bottom-0 end-0 me-3 mb-3">
-            <button type="button" @click="openCartModal" class="btn btn-outline-secondary position-relative" style="padding: 20px;">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span v-if="newBookInCart" class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2"><span class="visually-hidden">new book in cart</span></span>
-            </button>
-        </div>
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            <div class="col" v-for="book in allBooks">
-                <div class="card h-100">
-                    <div class="card-img-top">
-                        <img v-if="book.bookType=='Book'" src="./pics/book.png" style="width: 75px; height: 75px; margin-top: 20px;" alt="Book">
-                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" style="width: 75px; height: 75px; margin-top: 20px;" alt="Book">
-                    </div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{book.bookName}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">({{book.bookQuantity}} left)</h6>
-                        <p class="card-text" v-if="book.bookDescription.length>=20">{{book.bookDescription.slice(0, 20)}}...</p>
-                        <p class="card-text" v-else>{{book.bookDescription}}</p>
-                        <button @click="addToCart(book)" class="btn btn-outline-primary">{{book.bookPrice}}฿ | <i class="fa-solid fa-cart-shopping"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-    <!-- </div> -->
-
     <div id="app" style="margin: 0;">
         <!-- Cart Modal -->
         <div v-show="showCartModal" class="modal fade" :class="{ show: showCartModal, 'd-block': showCartModal }" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
@@ -252,7 +172,7 @@
                     <li><a id="homeNav" class="active" @click="goToHome">Home</a></li>
                     <li><a id="shopNav" @click="goToShop" >Shop</a></li>
                     <li v-if="userLogin.role == 'Admin'"><a id="adminNav" href="/views/adminView.html" target="_blank">Admin</a></li>
-                    <li><a id="accountNav" href="/views/loginView.html"><i class="fa-regular fa-user"></i></a></li>
+                    <li><a id="accountNav" href="/views/profileView.html"><i class="fa-regular fa-user"></i></a></li>
                     <li>
                         <a type="button" @click="openCartModal">
                             <i class="fa-solid fa-cart-shopping"></i>
