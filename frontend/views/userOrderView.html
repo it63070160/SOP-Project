@@ -45,7 +45,7 @@
                                   </tbody>
                               </table>
                           </div>
-                      <p class="float-end">Total : {{orderInModal.total}}฿</p>
+                      <p class="float-end" v-if="userLogin.role != 'Merchant'">Total : {{orderInModal.total}}฿</p>
                   </div>
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
@@ -54,7 +54,7 @@
           </div>
         </div>
         <h1 style="text-align: center; color: white;" class="mb-5">Order History</h1>
-        <div class="table-responsive h-50">
+        <div class="table-responsive h-50" v-if="userLogin.role != 'Merchant'">
           <table class="table" style="text-align: center;vertical-align: middle;color: white;">
               <thead style="color: #71b7e6;">
                   <th @click="sortType='sortID'" v-if="sortType=='sortID'">ID <i class="fa-solid fa-angle-up"></i></th>
@@ -67,6 +67,25 @@
                   <tr v-for="order in sortOrder" v-bind:key="order.orderId">
                       <td>{{order.orderId}}</td>
                       <td>{{order.total}}฿</td>
+                      <td>
+                          <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalInfoOrder(order)"><i class="fa-solid fa-circle-info"></i></button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+        </div>
+        <div class="table-responsive h-50" v-if="userLogin.role == 'Merchant'">
+          <table class="table" style="text-align: center;vertical-align: middle;color: white;">
+              <thead style="color: #71b7e6;">
+                  <th @click="sortType='sortID'" v-if="sortType=='sortID'">ID <i class="fa-solid fa-angle-up"></i></th>
+                  <th @click="sortType='sortID'" style="cursor: pointer;" v-else>ID</th>
+                  <th>Address</th>
+                  <th>Action</th>
+              </thead>
+              <tbody class="table-group-divider">
+                  <tr v-for="order in sortOrder" v-bind:key="order.orderId">
+                      <td>{{order.orderId}}</td>
+                      <td>{{order.buyerAddress}}</td>
                       <td>
                           <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalInfoOrder(order)"><i class="fa-solid fa-circle-info"></i></button>
                       </td>
@@ -89,6 +108,7 @@
               userLogin : "",
               sortType : "sortID",
               orderWithBookName : {},
+              allOrders : [],
           },
           computed:{
             sortOrder(){
@@ -133,7 +153,12 @@
                       getUser(token).then((response)=> {
                           getUserById(response.data.id).then(response => {
                               this.userLogin = response.data
-                              this.getOrders();
+                              if(this.userLogin.role != 'Merchant'){
+                                this.getOrders();
+                              }
+                              else{
+                                this.getOrdersForMerchant();
+                              }
                           }).catch(err => {
                               console.log(err)
                               alert("Please login again");
@@ -155,7 +180,8 @@
                     total : this.orderInModal.total
                 }
                 for(var i=0; i<order.bookList.length; i++){
-                  var orderQty = this.orderInModal.bookList[i].orderQuantity
+                  let orderQty = this.orderInModal.bookList[i].orderQuantity
+                  console.log(orderQty)
                   getBookById(order.bookList[i].bookId).then((response)=>{
                     this.orderWithBookName.bookList.push({
                       bookName : response.data.bookName,
@@ -164,10 +190,37 @@
                   })
                 }
               },
+              getOrdersForMerchant(){
+                getOrders().then(response => {
+                  this.formatOrder(response.data);
+                }).catch(err => {
+                  console.log(err)
+                })
+              },
               getOrders(){
                   userGetOrders(this.userLogin.userId).then((response)=>{
                       this.orders = response.data
                   })
+              },
+              formatOrder(orders){
+                for (let i=0; i<orders.length; i++){
+                  let newformat = {
+                    orderId : orders[i].orderId,
+                    buyerAddress : orders[i].buyerAddress,
+                    bookList : []
+                  }
+                  let foundBook = false;
+                  for (let j=0; j<orders[i].bookList.length; j++){
+                    if (orders[i].bookList[j].bookOwner == this.userLogin.userId){
+                      foundBook = true
+                      newformat.bookList.push(orders[i].bookList[j])
+                    }
+                  }
+                  if (foundBook){
+                    this.orders.push(newformat)
+                  }
+                }
+                console.log(this.orders)
               },
               closeModal(){
                   this.showOrderInfoModal = false
