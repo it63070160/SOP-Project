@@ -406,6 +406,7 @@
                     ownerId: "",
                 },
                 createBookNameError: false,
+                checkOutBook : [],
             },
             computed:{
                 total(){
@@ -512,6 +513,11 @@
                             orderQuantity: this.carts[i].quantity,
                             bookOwner: this.carts[i].bookOwner
                         })
+                        this.checkOutBook.push({
+                            bookId: this.carts[i].bookId,
+                            orderQuantity: this.carts[i].quantity,
+                            bookName: this.carts[i].bookName,
+                        })
                     }
                     this.checkOutInfo = {
                         buyer: this.userLogin.userId,
@@ -519,6 +525,8 @@
                         bookList: this.checkOutCart,
                         total: this.totalPrice,
                         buyerAddress: this.addressType=="old"?this.userLogin.address:this.newAddress,
+                        email : this.userLogin.email,
+                        bookListMail : this.checkOutBook
                     }
                     addNewOrder(this.checkOutInfo).then((response)=>{
                         if(response.data.indexOf("Error:")>=0){

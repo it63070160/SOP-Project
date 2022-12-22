@@ -79,6 +79,7 @@
                     </div>
                     <div class="modal-body" style="text-align:left">
                         <p>Buyer : {{orderInModal.buyer}}</p>
+                        <p>Address : {{orderInModal.buyerAddress}}</p>
                         <p>Book List : </p>
                             <div class="table-responsive">
                                 <table class="table table-hover" style="text-align: center;vertical-align: middle;">
@@ -378,6 +379,7 @@
                 <thead>
                     <th>ID</th>
                     <th>Buyer</th>
+                    <th>Address</th>
                     <th>Total</th>
                     <th>Action</th>
                 </thead>
@@ -385,6 +387,7 @@
                     <tr v-for="order in orders" v-bind:key="order.orderId">
                         <td>{{order.orderId}}</td>
                         <td>{{order.buyer}}</td>
+                        <td>{{order.buyerAddress}}</td>
                         <td>{{order.total}}฿</td>
                         <td>
                             <button type="button" class="btn btn-primary" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalInfoOrder(order)"><i class="fa-solid fa-circle-info"></i></button>
