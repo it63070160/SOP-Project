@@ -11,7 +11,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/books")
-//@CrossOrigin("http://127.0.0.1:5500/")
 public class BookCommandController {
     private final CommandGateway commandGateway;
 

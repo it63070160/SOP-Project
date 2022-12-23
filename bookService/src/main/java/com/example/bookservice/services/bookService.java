@@ -52,18 +52,10 @@ public class bookService{
                     .checkOutType(target.getCheckOutType())
                     .ownerId(target.getOwnerId())
                     .build();
-            commandGateway.sendAndWait(command);
+            commandGateway.send(command);
         }
         res.put("status", "ok");
         return res;
-    }
-    
-    @RabbitListener(queues = "getBookQueue")
-    public String getBookName(String bookId){
-        BookEntity userBook = bookRepository.findByBookId(bookId);
-        String name = userBook.getBookName();
-        System.out.println(name);
-        return name;
     }
 
     @RabbitListener(queues = "deleteQueue")
@@ -74,6 +66,13 @@ public class bookService{
         for(int i=0;i<=userBook.size()-1; i++){
             bookRepository.delete(userBook.get(i));
         }
+    }
+
+    @RabbitListener(queues = "getBookQueue")
+    public String getBookName(String bookId){
+        BookEntity userBook = bookRepository.findByBookId(bookId);
+        String name = userBook.getBookName();
+        return name;
     }
 
     @RabbitListener(queues = "deleteQueueOrder")
@@ -101,7 +100,7 @@ public class bookService{
                     .checkOutType(target.getCheckOutType())
                     .ownerId(target.getOwnerId())
                     .build();
-            commandGateway.sendAndWait(command);
+            commandGateway.send(command);
         }
         res.put("status", "ok");
         return res;
