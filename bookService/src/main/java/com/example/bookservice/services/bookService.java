@@ -57,6 +57,14 @@ public class bookService{
         res.put("status", "ok");
         return res;
     }
+    
+    @RabbitListener(queues = "getBookQueue")
+    public String getBookName(String bookId){
+        BookEntity userBook = bookRepository.findByBookId(bookId);
+        String name = userBook.getBookName();
+        System.out.println(name);
+        return name;
+    }
 
     @RabbitListener(queues = "deleteQueue")
     public void deleteBook(String userId){
