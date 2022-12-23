@@ -315,7 +315,7 @@
                 <ul id="navbar">
                     <li id="textNav"><a id="homeNav" class="active" @click="goToHome">HOME</a></li>
                     <li id="textNav"><a id="shopNav" @click="goToShop">SHOP</a></li>
-                    <li id="textNav"><a id="orderNav" href="/views/userOrderView.html">ORDERS</a></li>
+                    <li id="textNav" v-if="userLogin.role != 'Admin'"><a id="orderNav" href="/views/userOrderView.html">ORDERS</a></li>
                     <li v-if="userLogin.role == 'Admin'" id="textNav"><a id="adminNav" href="/views/adminView.html"
                             target="_blank">ADMIN</a></li>
                     <li><a id="accountNav" href="/views/profileView.html"><i class="fa-regular fa-user"></i></a></li>
