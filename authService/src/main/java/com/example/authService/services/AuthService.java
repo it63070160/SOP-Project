@@ -28,8 +28,6 @@ public class AuthService {
         check.put("username", authRequest.getUsername());
         check.put("password", authRequest.getPassword());
         Object result = rabbitTemplate.convertSendAndReceive("MyDirectExchange", "login", check);
-//        System.out.println("OK rabbit completed.");
-//        System.out.println("OK rabbit got : " + result);
 
         if(result != null){
             HashMap<String, String> res = (HashMap<String, String>) result;
