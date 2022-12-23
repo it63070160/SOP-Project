@@ -12,14 +12,13 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
-//@CrossOrigin("http://127.0.0.1:5500")
 public class UserCommandController {
     private final CommandGateway commandGateway;
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    public UserCommandController(CommandGateway commandGateway, RabbitTemplate rabbitTemplate){
+    public UserCommandController(CommandGateway commandGateway){
         this.commandGateway = commandGateway;
     }
 

@@ -31,12 +31,6 @@ public class UserAggregate {
         if(createUserCommand.getPassword() == null || createUserCommand.getPassword().isBlank()){
             throw new IllegalArgumentException("Error: Password cannot be empty");
         }
-//        if(createBookCommand.getBookType() != "E-Book" || createBookCommand.getBookType() != "Book"){
-//            throw new IllegalArgumentException("Book Type not allowed (E-book, Book)");
-//        }
-//        if(createBookCommand.getCheckOutType() != "COD" || createBookCommand.getCheckOutType() != "Transfer"){
-//            throw new IllegalArgumentException("Transfer Type not allowed (Cash on Delivery, Transfer)");
-//        }
         if(createUserCommand.getEmail() == null || createUserCommand.getEmail().isBlank()){
             throw new IllegalArgumentException("Error: Email cannot be empty");
         }
@@ -54,15 +48,6 @@ public class UserAggregate {
         if(editUserCommand.getUsername() == null || editUserCommand.getUsername().isBlank()){
             throw new IllegalArgumentException("Error: Username cannot be empty");
         }
-//        if(editUserCommand.getPassword() == null || editUserCommand.getPassword().isBlank()){
-//            throw new IllegalArgumentException("Error: Password cannot be empty");
-//        }
-//        if(createBookCommand.getBookType() != "E-Book" || createBookCommand.getBookType() != "Book"){
-//            throw new IllegalArgumentException("Book Type not allowed (E-book, Book)");
-//        }
-//        if(createBookCommand.getCheckOutType() != "COD" || createBookCommand.getCheckOutType() != "Transfer"){
-//            throw new IllegalArgumentException("Transfer Type not allowed (Cash on Delivery, Transfer)");
-//        }
         if(editUserCommand.getEmail() == null || editUserCommand.getEmail().isBlank()){
             throw new IllegalArgumentException("Error: Email cannot be empty");
         }
