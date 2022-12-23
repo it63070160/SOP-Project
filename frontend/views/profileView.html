@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Account Settings</title>
-	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-	<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/styleprofile.css">
+    <meta charset="UTF-8">
+    <title>Account Settings</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/styleprofile.css">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <!-- vue script -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
     <!-- axios -->
@@ -18,135 +20,143 @@
     <script type="text/javascript" src="../js/UserService.js"></script>
     <script type="text/javascript" src="../js/AuthService.js"></script>
 </head>
+
 <body>
-	<section class="vh-100 bg-image" style="background-image: url('../pics/backgroundimage.png')">
-		<div class="mask d-flex align-items-center h-100">
-		<div class="container" id="app">
-            <!-- Confirm Password Modal -->
-            <div v-show="showConfirmModal" class="modal fade" :class="{ show: showConfirmModal, 'd-block': showConfirmModal }" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content" >
-                        <div class="modal-header">
-                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"><span aria-hidden="true">&times;</span></button>
-                        </div>
-                        <div class="modal-body" style="text-align:left">
-                            Please enter password to confirm.
-                            <div class="form-group mt-3">
-                                <input type="password" class="form-control" :class="{'is-invalid': cPasswordError}" v-model="cPassword" required>
-                                <div class="invalid-feedback">
-                                    Password is incorrect ! ({{3-wrongPasswordCount}} left)
+    <section class="vh-100 bg-image" style="background-image: url('../pics/backgroundimage.png')">
+        <div class="mask d-flex align-items-center h-100">
+            <div class="container" id="app">
+                <!-- Confirm Password Modal -->
+                <div v-show="showConfirmModal" class="modal fade"
+                    :class="{ show: showConfirmModal, 'd-block': showConfirmModal }" id="confirmModal" tabindex="-1"
+                    aria-labelledby="confirmModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"
+                                    @click="closeModal"><span aria-hidden="true">&times;</span></button>
+                            </div>
+                            <div class="modal-body" style="text-align:left">
+                                Please enter password to confirm.
+                                <div class="form-group mt-3">
+                                    <input type="password" class="form-control" :class="{'is-invalid': cPasswordError}"
+                                        v-model="cPassword" required>
+                                    <div class="invalid-feedback">
+                                        Password is incorrect ! ({{3-wrongPasswordCount}} left)
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveUser">Confirm</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Cancel</button>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                                    @click="saveUser">Confirm</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                    @click="closeModal">Cancel</button>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="bg-white shadow rounded-lg d-block d-sm-flex">
+                    <div class="profile-tab-nav border-right">
+                        <div class="p-4">
+                            <div class="img-circle text-center mb-3">
+                                <img src="../pics/profileicon.png" alt="Image" class="shadow">
+                            </div>
+                            <h4 class="text-center">{{userLogin.username}}</h4>
+                        </div>
+                        <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                            aria-orientation="vertical">
+                            <a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab"
+                                aria-controls="account" aria-selected="true">
+                                <i class="fa fa-home text-center mr-1"></i>
+                                Account
+                            </a>
+                            <div class="d-flex justify-content-center">
+                                <a><button class="button-36 " @click="logout">Log out</button></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-content p-4 p-md-5 mb-5" id="v-pills-tabContent">
+                        <div class="tab-pane fade show active" id="account" role="tabpanel"
+                            aria-labelledby="account-tab">
+                            <h3 class="mb-4">Account Settings</h3>
+                            <div class="alert"
+                                :class="{ 'alert-primary': error==false, 'alert-danger': error, 'd-none': message=='' }"
+                                role="alert">
+                                {{message}}
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Username</label>
+                                        <input type="text" class="form-control" v-model="userLogin.username" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Role</label>
+                                        <input type="text" class="form-control" v-model="userLogin.role" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input type="password" class="form-control" v-model="ePassword" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" class="form-control" v-model="eEmail" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>Address</label>
+                                        <textarea class="form-control" rows="4" v-model="eAddress"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" @click="confirmPassword">Update</button>
+                                <a href="../index.html"><button class="btn btn-light">Back</button></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
             </div>
-			<div class="bg-white shadow rounded-lg d-block d-sm-flex">
-				<div class="profile-tab-nav border-right">
-					<div class="p-4">
-						<div class="img-circle text-center mb-3">
-							<img src="../pics/profileicon.png" alt="Image" class="shadow">
-						</div>
-						<h4 class="text-center">{{userLogin.username}}</h4>
-					</div>
-					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-						<a class="nav-link active" id="account-tab" data-toggle="pill" href="#account" role="tab" aria-controls="account" aria-selected="true">
-							<i class="fa fa-home text-center mr-1"></i> 
-							Account
-						</a>
-                        <div class="d-flex justify-content-center">
-                            <a><button  class="button-36 " @click="logout">Log out</button></a>
-                        </div>
-					</div>
-				</div>
-				<div class="tab-content p-4 p-md-5 mb-5" id="v-pills-tabContent">
-					<div class="tab-pane fade show active" id="account" role="tabpanel" aria-labelledby="account-tab">
-						<h3 class="mb-4">Account Settings</h3>
-                        <div
-                            class="alert"
-                            :class="{ 'alert-primary': error==false, 'alert-danger': error, 'd-none': message=='' }"
-                            role="alert"
-                        >
-                            {{message}}
-                        </div>
-						<div class="row">
-							<div class="col-md-6">
-								<div class="form-group">
-								  	<label>Username</label>
-								  	<input type="text" class="form-control" v-model="userLogin.username" readonly>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-								  	<label>Role</label>
-								  	<input type="text" class="form-control" v-model="userLogin.role" readonly>
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-								  	<label>Password</label>
-								  	<input type="password" class="form-control" v-model="ePassword" required>
-								</div>
-							</div>
-                            <div class="col-md-6">
-								<div class="form-group">
-								  	<label>Email</label>
-								  	<input type="text" class="form-control" v-model="eEmail" required>
-								</div>
-							</div>
-							<div class="col-md-12">
-								<div class="form-group">
-								  	<label>Address</label>
-									<textarea class="form-control" rows="4" v-model="eAddress"></textarea>
-								</div>
-							</div>
-						</div>
-						<div>
-							<button class="btn btn-primary" @click="confirmPassword">Update</button>
-							<a href="../index.html"><button class="btn btn-light">Back</button></a>
-						</div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</div>
-	</section>
+        </div>
+    </section>
 
     <script>
         var app = new Vue({
             el: '#app',
             data: {
-                eUsername : "",
-                eEmail : "",
-                eAddress : "",
-                eRole : "",
-                eId : "",
-                ePassword : "",
-                userLogin : "",
-                userInfo : "",
-                error : false,
-                message : "",
-                showConfirmModal : false,
+                eUsername: "",
+                eEmail: "",
+                eAddress: "",
+                eRole: "",
+                eId: "",
+                ePassword: "",
+                userLogin: "",
+                userInfo: "",
+                error: false,
+                message: "",
+                showConfirmModal: false,
                 cPassword: "",
                 cPasswordError: false,
                 wrongPasswordCount: 0,
             },
-            methods:{
-                getRole(){
+            methods: {
+                getRole() {
                     var token = localStorage.getItem("token");
-                    if (token == null){
+                    if (token == null) {
                         alert("Please login first.")
                         localStorage.clear()
-                        window.location.href ="/views/loginView.html"
+                        window.location.href = "/views/loginView.html"
                     }
-                    else{
+                    else {
                         token = JSON.parse(token)
-                        getUser(token).then((response)=> {
+                        getUser(token).then((response) => {
                             getUserById(response.data.id).then(response => {
                                 this.userLogin = response.data
                                 this.eId = this.userLogin.userId
@@ -159,50 +169,50 @@
                                 console.log(err)
                                 alert("Please login again");
                                 localStorage.clear()
-                                window.location.href ="/views/loginView.html"
+                                window.location.href = "/views/loginView.html"
                             })
                         }).catch(err => {
                             console.log(err)
                             alert("Session timeout\nPlease login again");
                             localStorage.clear()
-                            window.location.href ="/views/loginView.html"
+                            window.location.href = "/views/loginView.html"
                         })
                     }
                 },
-                saveUser(){
-                    if(this.cPassword == this.userLogin.password){
+                saveUser() {
+                    if (this.cPassword == this.userLogin.password) {
                         this.userInfo = {
-                            id:this.eId ,
-                            username:this.eUsername, 
-                            email:this.eEmail, 
-                            address:this.eAddress, 
-                            role:this.eRole, 
-                            password : this.ePassword
+                            id: this.eId,
+                            username: this.eUsername,
+                            email: this.eEmail,
+                            address: this.eAddress,
+                            role: this.eRole,
+                            password: this.ePassword
                         }
-                        editUser(this.userInfo).then((response)=>{
+                        editUser(this.userInfo).then((response) => {
                             this.error = false
                             location.reload()
-                        }).catch((error)=>{
+                        }).catch((error) => {
                             this.error = true
                             this.message = e
                         });
-                    }else{
+                    } else {
                         this.cPasswordError = true;
-                        if(this.wrongPasswordCount+1>=3){
+                        if (this.wrongPasswordCount + 1 >= 3) {
                             this.logout()
-                        }else{
+                        } else {
                             this.wrongPasswordCount++
                         }
                     }
                 },
-                confirmPassword(){
+                confirmPassword() {
                     this.showConfirmModal = true
                 },
-                closeModal(){
+                closeModal() {
                     this.showConfirmModal = false
                     this.cPasswordError = false
                 },
-                logout(){
+                logout() {
                     localStorage.clear();
                     location.href = '/views/loginView.html'
                 }
@@ -213,4 +223,5 @@
         })
     </script>
 </body>
+
 </html>

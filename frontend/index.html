@@ -1,11 +1,13 @@
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ploikong Bookstore</title>
     <link href="./css/styles.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/d65ed2b465.js" crossorigin="anonymous"></script>
     <!-- vue script -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
@@ -16,22 +18,26 @@
     <script type="text/javascript" src="../js/OrderService.js"></script>
     <script type="text/javascript" src="../js/main.js"></script>
 </head>
+
 <body>
     <div id="app" style="margin: 0;">
         <!-- Notification Coming Soon-->
-        <div class="position-fixed top-0" style="margin-top: 5%; margin-left: 40%; z-index: 10;">
+        <div class="position-fixed bottom-0 end-10">
             <div class="alert alert-danger" :class="{'d-none':error==false, 'd-block':error}" role="alert">
                 {{errorMessage}} (restart in {{reloadCount}} sec)
             </div>
         </div>
         <!-- Book Edit Modal -->
-        <div v-show="showEditBookModal" class="modal fade" :class="{ show: showEditBookModal, 'd-block': showEditBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div v-show="showEditBookModal" class="modal fade"
+            :class="{ show: showEditBookModal, 'd-block': showEditBookModal }" id="exampleModal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Book</h1>
                         <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            @click="closeModal"></button>
                     </div>
                     <div class="modal-body" style="text-align:left">
                         <div class="form-group">
@@ -44,22 +50,26 @@
                                 <label for="description">Edit Description</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="eType">
+                                <select class="form-select" id="floatingSelect"
+                                    aria-label="Floating label select example" v-model="eType">
                                     <option value="Book">Book</option>
                                     <option value="E-Book">E-Book</option>
                                 </select>
                                 <label for="type">Edit Type</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="number" min="0" step="1" v-model="eQuantity" id="quantity" class="form-control">
+                                <input type="number" min="0" step="1" v-model="eQuantity" id="quantity"
+                                    class="form-control">
                                 <label for="quantity">Edit Quantity</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="number" min="0" step="0.01" v-model="ePrice" id="price" class="form-control">
+                                <input type="number" min="0" step="0.01" v-model="ePrice" id="price"
+                                    class="form-control">
                                 <label for="price">Edit Price</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="floatingSelect" aria-label="Floating label select example" v-model="eCheckoutType">
+                                <select class="form-select" id="floatingSelect"
+                                    aria-label="Floating label select example" v-model="eCheckoutType">
                                     <option value="Cash on Delivery" selected>Cash on Delivery</option>
                                     <option value="Transfer" disabled>Transfer (Coming Soon)</option>
                                 </select>
@@ -72,55 +82,74 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" data-bs-dismiss="modal" @click="saveBook">Save</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                        <button type="button" class="btn btn-success" data-bs-dismiss="modal"
+                            @click="saveBook">Save</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="closeModal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Book Delete Modal -->
-        <div v-show="showdeleteBookModal" class="modal fade" :class="{ show: showdeleteBookModal, 'd-block': showdeleteBookModal }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div v-show="showdeleteBookModal" class="modal fade"
+            :class="{ show: showdeleteBookModal, 'd-block': showdeleteBookModal }" id="exampleModal" tabindex="-1"
+            aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Book</h1>
                         <p class="modal-title" style="margin-left:5px; font-size:15px">(id: {{eId}})</p>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeModal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            @click="closeModal"></button>
                     </div>
                     <div class="modal-body" style="text-align:left">
                         Are you sure?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="deleteBook">Delete</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeModal">Close</button>
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                            @click="deleteBook">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="closeModal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Cart Modal -->
-        <div v-show="showCartModal" class="modal fade" :class="{ show: showCartModal, 'd-block': showCartModal }" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div v-show="showCartModal" class="modal fade" :class="{ show: showCartModal, 'd-block': showCartModal }"
+            id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="cartModalLabel">My Cart</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeCartModal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            @click="closeCartModal"></button>
                     </div>
                     <div class="modal-body" v-if="cartStep==1" style="text-align: left;">
                         <div class="position-relative m-4 mb-5">
                             <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 0%;"
+                                    aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem; cursor:context-menu">3</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-secondary rounded-pill"
+                                style="width: 2rem; height:2rem; cursor:context-menu">2</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill"
+                                style="width: 2rem; height:2rem; cursor:context-menu">3</button>
                         </div>
                         <div v-for="(cart, index) in carts" class="mb-5">
                             {{cart.bookName}}
                             <div class="btn-group float-end">
-                                <button type="button" @click="minusQty(index)" class="btn btn-outline-primary"><i class="fa-solid fa-minus"></i></button>
-                                <input type="button" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                                <button type="button" @click="minusQty(index)" class="btn btn-outline-primary"><i
+                                        class="fa-solid fa-minus"></i></button>
+                                <input type="button" class="btn-check" name="btnradio" id="btnradio2"
+                                    autocomplete="off">
                                 <label class="btn btn-outline-primary" for="btnradio2">{{cart.quantity}}</label>
-                                <button type="button" @click="plusQty(index)" class="btn btn-outline-primary"><i class="fa-solid fa-plus"></i></button>
+                                <button type="button" @click="plusQty(index)" class="btn btn-outline-primary"><i
+                                        class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
                         <p v-if="carts.length>0" class="float-end">Total : {{total}}฿</p>
@@ -129,17 +158,25 @@
                     <div class="modal-body" v-if="cartStep==2" style="text-align: left;">
                         <div class="position-relative m-4 mb-5">
                             <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 50%;"
+                                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;cursor:context-menu">3</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill"
+                                style="width: 2rem; height:2rem;cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
                             <div class="card h-50 mb-5" v-if="userLogin.address.length>0">
                                 <div class="card-header">
                                     Your Address
-                                    <input class="form-check-input mt-1 float-end" type="radio" value="old" v-model="addressType" aria-label="Checkbox for following text input">
+                                    <input class="form-check-input mt-1 float-end" type="radio" value="old"
+                                        v-model="addressType" aria-label="Checkbox for following text input">
                                 </div>
                                 <div class="card-body">
                                     <div class="card-text">
@@ -150,21 +187,28 @@
                             <div class="card h-50 mb-5">
                                 <div class="card-header">
                                     New Address
-                                    <input class="form-check-input mt-1 float-end" type="radio" value="new" v-model="addressType" aria-label="Checkbox for following text input">
+                                    <input class="form-check-input mt-1 float-end" type="radio" value="new"
+                                        v-model="addressType" aria-label="Checkbox for following text input">
                                 </div>
                                 <div class="card-body">
                                     <div class="input-group mb-3">
-                                        <textarea class="form-control" :class="{'is-invalid': addressError}" placeholder="New address here" id="validationTextarea" style="height: 100px" v-model="newAddress" required></textarea>
+                                        <textarea class="form-control" :class="{'is-invalid': addressError}"
+                                            placeholder="New address here" id="validationTextarea" style="height: 100px"
+                                            v-model="newAddress" required></textarea>
                                         <!-- <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2"> -->
-                                        <button class="btn btn-success" @click="saveNewAddress" v-if="savingAddress==-1">Save</button>
-                                        <button class="btn btn-secondary" v-if="savingAddress==0" disabled>. . .</button>
-                                        <button class="btn btn-outline-success" v-if="savingAddress==1"><i class="fa-solid fa-check"></i></button>
-                                        <button class="btn btn-outline-danger" v-if="savingAddress==2"><i class="fa-solid fa-xmark"></i></button>
+                                        <button class="btn btn-success" @click="saveNewAddress"
+                                            v-if="savingAddress==-1">Save</button>
+                                        <button class="btn btn-secondary" v-if="savingAddress==0" disabled>. .
+                                            .</button>
+                                        <button class="btn btn-outline-success" v-if="savingAddress==1"><i
+                                                class="fa-solid fa-check"></i></button>
+                                        <button class="btn btn-outline-danger" v-if="savingAddress==2"><i
+                                                class="fa-solid fa-xmark"></i></button>
                                         <div class="invalid-feedback">
                                             Please enter a new address.
                                         </div>
-                                      </div>
-                                    
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -172,11 +216,18 @@
                     <div class="modal-body" v-if="cartStep==3" style="text-align: left;">
                         <div class="position-relative m-4 mb-5">
                             <div class="progress" style="height: 1px;">
-                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="progress-bar" role="progressbar" aria-label="Progress" style="width: 100%;"
+                                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                             </div>
-                            <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
-                            <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
-                            <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill" style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">3</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-0 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">1</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-50 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">2</button>
+                            <button type="button"
+                                class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill"
+                                style="width: 2rem; height:2rem; background-color: #71b7e6; cursor:context-menu">3</button>
                         </div>
                         <div class="mb-5">
                             <div class="card h-50">
@@ -208,30 +259,40 @@
                         Your order was confirmed ! Thank for purchased
                     </div>
                     <div class="modal-footer" v-if="cartStep==1">
-                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="cartStep++" v-if="carts.length>0">Next</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Close</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal"
+                            @click="cartStep++" v-if="carts.length>0">Next</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="closeCartModal">Close</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==2">
-                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="checkAddress">Next</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal"
+                            @click="checkAddress">Next</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="cartStep--">Back</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==3">
-                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal" @click="checkOut">Check Out</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="cartStep--">Back</button>
+                        <button type="button" class="btn" style="background-color:#71b7e6" data-bs-dismiss="modal"
+                            @click="checkOut">Check Out</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="cartStep--">Back</button>
                     </div>
                     <div class="modal-footer" v-if="cartStep==4">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeCartModal">Back</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="closeCartModal">Back</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Book Detail Modal -->
-        <div v-show="showBookDetailModal" class="modal fade" :class="{ show: showBookDetailModal, 'd-block': showBookDetailModal }" id="bookDetailModal" tabindex="-1" aria-labelledby="bookDetailModalLabel" aria-hidden="true">
+        <div v-show="showBookDetailModal" class="modal fade"
+            :class="{ show: showBookDetailModal, 'd-block': showBookDetailModal }" id="bookDetailModal" tabindex="-1"
+            aria-labelledby="bookDetailModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="bookDetailModalLabel">{{bookDetail.bookName}}</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="closeBookDetailModal"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            @click="closeBookDetailModal"></button>
                     </div>
                     <div class="modal-body" style="text-align: left;">
                         <p>Book Description : {{bookDetail.bookDescription}}</p>
@@ -240,24 +301,30 @@
                         <p>Book Owner : {{bookDetailOwner}}</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="closeBookDetailModal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            @click="closeBookDetailModal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
         <section id="header" style="position: relative; width: 100%;">
-            <a @click="goToHome"><h3 class="rainbow">Ploikong Bookstore</h3></a>
+            <a @click="goToHome">
+                <h3 class="rainbow">Ploikong Bookstore</h3>
+            </a>
             <div>
-                <ul id="navbar" >
+                <ul id="navbar">
                     <li id="textNav"><a id="homeNav" class="active" @click="goToHome">HOME</a></li>
-                    <li id="textNav"><a id="shopNav" @click="goToShop" >SHOP</a></li>
+                    <li id="textNav"><a id="shopNav" @click="goToShop">SHOP</a></li>
                     <li id="textNav"><a id="orderNav" href="/views/userOrderView.html">ORDERS</a></li>
-                    <li v-if="userLogin.role == 'Admin'" id="textNav"><a id="adminNav" href="/views/adminView.html" target="_blank">ADMIN</a></li>
+                    <li v-if="userLogin.role == 'Admin'" id="textNav"><a id="adminNav" href="/views/adminView.html"
+                            target="_blank">ADMIN</a></li>
                     <li><a id="accountNav" href="/views/profileView.html"><i class="fa-regular fa-user"></i></a></li>
                     <li id="cart">
                         <a type="button" @click="openCartModal">
                             <i class="fa-solid fa-cart-shopping"></i>
-                            <span v-if="newBookInCart" class="position-absolute top-0 start-70 translate-middle badge border border-light rounded-circle bg-danger p-1"><span class="visually-hidden">new book in cart</span></span>
+                            <span v-if="newBookInCart"
+                                class="position-absolute top-0 start-70 translate-middle badge border border-light rounded-circle bg-danger p-1"><span
+                                    class="visually-hidden">new book in cart</span></span>
                         </a>
                         <!-- <a id="cartNav" href="cart.html"><i class="fa-sharp fa-solid fa-cart-shopping"></i></a> -->
                     </li>
@@ -277,73 +344,91 @@
             <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role != 'Merchant'">
                 <div class="pro-container col" v-for="book in allBooks" v-if="book.bookQuantity>0">
                     <div class="pro">
-                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
-                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt=""
+                            @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt=""
+                            @click="openBookDetailModal(book)">
                         <div class="des" @click="openBookDetailModal(book)">
                             <h6 style="font-weight: bold;">{{book.bookName}}</h6>
                             <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h5>
                             <h5 v-else>{{book.bookDescription}}</h5>
                             <h4>{{book.bookPrice}}฿ ({{book.bookQuantity}} left)</h4>
                         </div>
-                        <button class="custom-class" @click="addToCart(book)"><i class="fa-sharp fa-solid fa-cart-shopping" ></i></button>
+                        <button class="custom-class" @click="addToCart(book)"><i
+                                class="fa-sharp fa-solid fa-cart-shopping"></i></button>
                     </div>
                 </div>
             </div>
             <div class="row row-cols-1 row-cols-md-5 g-5" v-if="userLogin.role == 'Merchant'">
                 <div class="pro-container col" v-for="book in myBooks" v-show="book.ownerId == userLogin.userId">
                     <div class="pro">
-                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
-                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='Book'" src="./pics/book.png" alt=""
+                            @click="openBookDetailModal(book)">
+                        <img v-if="book.bookType=='E-Book'" src="./pics/Ebook.png" alt=""
+                            @click="openBookDetailModal(book)">
                         <div class="des" @click="openBookDetailModal(book)">
-                            <h6 style="font-weight: bold;">{{book.bookName}}</h5>
-                            <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...</h6>
-                            <h5 v-else>{{book.bookDescription}}</h6>
-                            <h4>{{book.bookPrice}}฿ ({{book.bookQuantity}} left)</h4>
+                            <h6 style="font-weight: bold;">{{book.bookName}}</h6>
+                                <h5 v-if="book.bookDescription.length>=30">{{book.bookDescription.slice(0,30)}}...
+                            </h5>
+                            <h5 v-else>{{book.bookDescription}}</h5>
+                                <h4>{{book.bookPrice}}฿ ({{book.bookQuantity}} left)</h4>
                         </div>
-                        <button type="button" class="btn btn-warning" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalEditBook(book)"><i class="fa-regular fa-pen-to-square"></i></button>
-                        <button type="button" class="btn btn-danger" style="margin: 5px" data-bs-toggle="modal" data-bs-target="#infoModal" @click="openModalDeleteBook(book)"><i class="fa-solid fa-trash"></i></button>
+                        <button type="button" class="btn btn-warning" style="margin: 5px" data-bs-toggle="modal"
+                            data-bs-target="#infoModal" @click="openModalEditBook(book)"><i
+                                class="fa-regular fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger" style="margin: 5px" data-bs-toggle="modal"
+                            data-bs-target="#infoModal" @click="openModalDeleteBook(book)"><i
+                                class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
                 <div class="pro-container col" style="height: 50px;">
                     <div class="pro">
-                        <img v-if="createBookInfo.Type=='Book'" src="./pics/book.png" alt="" @click="openBookDetailModal(book)">
-                        <img v-if="createBookInfo.Type=='E-Book'" src="./pics/Ebook.png" alt="" @click="openBookDetailModal(book)">
+                        <img v-if="createBookInfo.Type=='Book'" src="./pics/book.png" alt=""
+                            @click="openBookDetailModal(book)">
+                        <img v-if="createBookInfo.Type=='E-Book'" src="./pics/Ebook.png" alt=""
+                            @click="openBookDetailModal(book)">
                         <div class="des">
                             <div class="form-floating mb-3">
-                                <input type="text" class="form-control" :class="{'is-invalid':createBookNameError}" id="createName" v-model="createBookInfo.Name" placeholder="your book name">
+                                <input type="text" class="form-control" :class="{'is-invalid':createBookNameError}"
+                                    id="createName" v-model="createBookInfo.Name" placeholder="your book name">
                                 <label for="floatingInput">Name</label>
                                 <div class="invalid-feedback">
                                     Please enter book name.
                                 </div>
                             </div>
                             <div class="form-floating mb-3">
-                                <textarea class="form-control" placeholder="your book description" id="floatingTextarea" v-model="createBookInfo.Desc"></textarea>
+                                <textarea class="form-control" placeholder="your book description" id="floatingTextarea"
+                                    v-model="createBookInfo.Desc"></textarea>
                                 <label for="floatingTextarea">Description</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.Type" aria-label="Floating label select example">
+                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.Type"
+                                    aria-label="Floating label select example">
                                     <option value="Book" selected>Book</option>
                                     <option value="E-Book">E-Book</option>
                                 </select>
                                 <label for="floatingSelect">Type</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="number" class="form-control" id="floatingInput" min="1" v-model="createBookInfo.Qty" required>
+                                <input type="number" class="form-control" id="floatingInput" min="1"
+                                    v-model="createBookInfo.Qty" required>
                                 <label for="floatingInput" class="col-sm-2 col-form-label">Quantity</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <input type="number" step="0.01" class="form-control" id="floatingInput" min="0" v-model="createBookInfo.Price" required>
+                                <input type="number" step="0.01" class="form-control" id="floatingInput" min="0"
+                                    v-model="createBookInfo.Price" required>
                                 <label for="floatingInput" class="col-sm-2 col-form-label">Price</label>
                             </div>
                             <div class="form-floating mb-3">
-                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.checkOut" aria-label="Floating label select example">
-                                <option value="Cash on Delivery" selected>Cash on Delivery</option>
-                                <option value="Transfer" disabled>Transfer (Coming Soon)</option>
+                                <select class="form-select" id="floatingSelect" v-model="createBookInfo.checkOut"
+                                    aria-label="Floating label select example">
+                                    <option value="Cash on Delivery" selected>Cash on Delivery</option>
+                                    <option value="Transfer" disabled>Transfer (Coming Soon)</option>
                                 </select>
                                 <label for="floatingSelect">Checkout Type</label>
                             </div>
                         </div>
-                        <button class="custom-class" @click="addBook"><i class="fa-sharp fa-solid fa-plus" ></i></button>
+                        <button class="custom-class" @click="addBook"><i class="fa-sharp fa-solid fa-plus"></i></button>
                     </div>
                 </div>
             </div>
@@ -358,7 +443,7 @@
                 userInfo: "",
                 bookDetail: {},
                 bookDetailOwner: "",
-                showAddBookModal : false,
+                showAddBookModal: false,
                 showCartModal: false,
                 showBookDetailModal: false,
                 showdeleteBookModal: false,
@@ -383,16 +468,16 @@
                 addressError: false,
                 checkOutCart: [],
                 checkOutInfo: {},
-                eId : "",
-                eName : "",
-                eType : "",
-                eQuantity : 0,
-                ePrice : 0.00,
-                eCheckoutType : "Cash on Delivery",
-                eOwnerId : "",
-                eDescription : "",
-                showEditBookModal : false,
-                bookInfo : [], // model in Edit
+                eId: "",
+                eName: "",
+                eType: "",
+                eQuantity: 0,
+                ePrice: 0.00,
+                eCheckoutType: "Cash on Delivery",
+                eOwnerId: "",
+                eDescription: "",
+                showEditBookModal: false,
+                bookInfo: [], // model in Edit
                 createBookInfo: {
                     Name: "",
                     Desc: "",
@@ -403,104 +488,105 @@
                     ownerId: "",
                 },
                 createBookNameError: false,
-                checkOutBook : [],
+                checkOutBook: [],
                 reloadCount: 3,
             },
-            computed:{
-                total(){
+            computed: {
+                total() {
                     this.totalPrice = 0
-                    for(let i=0; i<this.carts.length; i++){
-                        this.totalPrice += (this.carts[i].price*this.carts[i].quantity)
+                    for (let i = 0; i < this.carts.length; i++) {
+                        this.totalPrice += (this.carts[i].price * this.carts[i].quantity)
                     }
                     return this.totalPrice
                 }
             },
-            methods:{
-                getRole(){
+            methods: {
+                getRole() {
                     var token = localStorage.getItem("token");
-                    if (token == null){
+                    if (token == null) {
                         alert("Please login first.")
                         localStorage.clear()
-                        window.location.href ="/views/loginView.html"
+                        window.location.href = "/views/loginView.html"
                     }
-                    else{
+                    else {
                         token = JSON.parse(token)
-                        getUser(token).then((response)=> {
+                        getUser(token).then((response) => {
                             getUserById(response.data.id).then(response => {
                                 this.userLogin = response.data
-                                if(this.userLogin.role=='User' || this.userLogin.role=='Admin'){
+                                if (this.userLogin.role == 'User' || this.userLogin.role == 'Admin') {
                                     this.getAllBooks();
-                                }else if(this.userLogin.role=='Merchant'){
+                                } else if (this.userLogin.role == 'Merchant') {
                                     this.getMyBooks();
                                 }
                             }).catch(err => {
                                 console.log(err)
                                 alert("Please login again");
                                 localStorage.clear()
-                                window.location.href ="/views/loginView.html"
+                                window.location.href = "/views/loginView.html"
                             })
                         }).catch(err => {
                             console.log(err)
                             alert("Session timeout\nPlease login again");
                             localStorage.clear()
-                            window.location.href ="/views/loginView.html"
+                            window.location.href = "/views/loginView.html"
                         })
                     }
                 },
-                getMyBooks(){
-                    getUserBooks(this.userLogin.userId).then((response)=>{
+                getMyBooks() {
+                    getUserBooks(this.userLogin.userId).then((response) => {
                         this.myBooks = response.data
                     })
                 },
-                getAllBooks(){
-                    getBooks().then((response)=>{
+                getAllBooks() {
+                    getBooks().then((response) => {
                         this.allBooks = response.data;
                     })
                 },
-                plusQty(index){
+                plusQty(index) {
                     this.carts[index].quantity = this.carts[index].quantity + 1
                 },
-                checkAddress(){
-                    if(this.addressType == 'new' && this.newAddress.length <= 0){
+                checkAddress() {
+                    if (this.addressType == 'new' && this.newAddress.length <= 0) {
                         this.addressError = true;
-                    }else if(this.addressType == 'old' && this.userLogin.address.length <=0){
+                    } else if (this.addressType == 'old' && this.userLogin.address.length <= 0) {
                         this.addressError = true;
-                    }else{
+                    } else {
                         this.cartStep++
                     }
                 },
-                saveNewAddress(){
-                    if(this.newAddress.length > 0){
+                saveNewAddress() {
+                    if (this.newAddress.length > 0) {
                         this.savingAddress = 0
-                        setTimeout(()=>{
+                        setTimeout(() => {
                             this.savingAddress = -1
                         }, 3000)
                         this.userLogin.address = this.newAddress
                         this.userInfo = {
-                            id:this.userLogin.userId ,
-                            username:this.userLogin.username, 
-                            email:this.userLogin.email, 
-                            address:this.userLogin.address,
-                            role:this.userLogin.role, 
-                            password : this.userLogin.password
+                            id: this.userLogin.userId,
+                            username: this.userLogin.username,
+                            email: this.userLogin.email,
+                            address: this.userLogin.address,
+                            role: this.userLogin.role,
+                            password: this.userLogin.password
                         }
-                        editUser(this.userInfo).then((response)=>{
-                            setTimeout(()=>{
+                        editUser(this.userInfo).then((response) => {
+                            setTimeout(() => {
                                 this.savingAddress = 1
                             }, 2000)
-                        }).catch((error)=>{
-                            setTimeout(()=>{
+                        }).catch((error) => {
+                            setTimeout(() => {
                                 this.savingAddress = 2
                             }, 2000)
                         });
-                    }else{
+                    } else {
                         this.addressError = true
                     }
                 },
-                checkOut(){
+                checkOut() {
                     this.checkOutCart = []
                     this.checkOutInfo = {}
-                    for(var i=0; i<this.carts.length;i++){
+                    this.checkOutBook = []
+                    for (var i = 0; i < this.carts.length; i++) {
                         this.checkOutCart.push({
                             bookId: this.carts[i].bookId,
                             orderQuantity: this.carts[i].quantity,
@@ -517,56 +603,59 @@
                         bookList_String: JSON.stringify(this.checkOutCart),
                         bookList: this.checkOutCart,
                         total: this.totalPrice,
-                        buyerAddress: this.addressType=="old"?this.userLogin.address:this.newAddress,
-                        email : this.userLogin.email,
-                        bookListMail : this.checkOutBook
+                        buyerAddress: this.addressType == "old" ? this.userLogin.address : this.newAddress,
+                        email: this.userLogin.email,
+                        bookListMail: this.checkOutBook
                     }
-                    addNewOrder(this.checkOutInfo).then((response)=>{
-                        if(response.data.indexOf("Error:")>=0){
+                    addNewOrder(this.checkOutInfo).then((response) => {
+                        if (response.data.indexOf("Error:") >= 0) {
                             this.errorMessage = response.data
                             this.error = true
-                            setInterval(()=>{
+                            setInterval(() => {
                                 this.reloadCount--
                             }, 1000)
-                            setTimeout(()=>{
+                            setTimeout(() => {
                                 location.reload()
                             }, 3000)
-                        }else{
+                        } else {
                             this.cartStep++
+                            setTimeout(() => {
+                                location.reload()
+                            }, 2000)
                         }
                     })
                 },
-                minusQty(index){
-                    if(this.carts[index].quantity-1 == 0){
+                minusQty(index) {
+                    if (this.carts[index].quantity - 1 == 0) {
                         this.carts.splice(index, 1)
-                    }else{
+                    } else {
                         this.carts[index].quantity = this.carts[index].quantity - 1
                     }
                 },
-                goToShop(){
+                goToShop() {
                     scrollToShop()
                 },
-                goToHome(){
+                goToHome() {
                     scrollToHome()
                 },
-                addToCart(book){
+                addToCart(book) {
                     var already = false
                     var alreadyInCartId = -1
-                    for(var i=0; i<this.carts.length;i++){
-                        if(this.carts[i].bookId == book.bookId){
+                    for (var i = 0; i < this.carts.length; i++) {
+                        if (this.carts[i].bookId == book.bookId) {
                             already = true
                             alreadyInCartId = i
                         }
                     }
-                    if(already){
-                        this.carts[alreadyInCartId].quantity = this.carts[alreadyInCartId].quantity+1
-                    }else{
+                    if (already) {
+                        this.carts[alreadyInCartId].quantity = this.carts[alreadyInCartId].quantity + 1
+                    } else {
                         this.carts.push({
-                            "bookId":book.bookId,
-                            "bookName":book.bookName,
-                            "quantity":1,
-                            "price":book.bookPrice,
-                            "bookOwner":book.ownerId
+                            "bookId": book.bookId,
+                            "bookName": book.bookName,
+                            "quantity": 1,
+                            "price": book.bookPrice,
+                            "bookOwner": book.ownerId
                         })
                     }
                     setTimeout(() => {
@@ -575,10 +664,10 @@
                     document.getElementById('cart').style = "animation: scale .5s linear"
                     this.newBookInCart = true
                 },
-                addBook(){
-                    if(this.createBookInfo.Name.length<=0){
+                addBook() {
+                    if (this.createBookInfo.Name.length <= 0) {
                         this.createBookNameError = true
-                    }else{
+                    } else {
                         this.newBookInfo = {
                             bookName: this.createBookInfo.Name,
                             bookDescription: this.createBookInfo.Desc,
@@ -588,29 +677,29 @@
                             checkOutType: this.createBookInfo.checkOut,
                             ownerId: this.userLogin.userId
                         }
-                        addNewBook(this.newBookInfo).then((response)=>{
+                        addNewBook(this.newBookInfo).then((response) => {
                             location.reload()
                         })
                     }
                 },
-                openBookDetailModal(book){
-                    getUserById(book.ownerId).then((response)=>{
+                openBookDetailModal(book) {
+                    getUserById(book.ownerId).then((response) => {
                         this.bookDetailOwner = response.data.username
                     })
                     this.showBookDetailModal = true
                     this.bookDetail = book
                 },
-                closeBookDetailModal(){
+                closeBookDetailModal() {
                     this.showBookDetailModal = false
                     this.bookDetail = {}
                     this.bookDetailOwner = ""
                     this.merchantEdit = false
                 },
-                openCartModal(){
+                openCartModal() {
                     this.showCartModal = true;
                     this.newBookInCart = false;
                 },
-                closeCartModal(){
+                closeCartModal() {
                     this.showCartModal = false
                     this.cartStep = 1
                     this.addressError = false
@@ -619,7 +708,7 @@
                     this.checkOutInfo = {}
                     this.checkOutCart = []
                 },
-                openModalEditBook(book){
+                openModalEditBook(book) {
                     this.showEditBookModal = true
                     this.eId = book.bookId
                     this.eName = book.bookName
@@ -630,26 +719,26 @@
                     this.eOwnerId = book.ownerId
                     this.eDescription = book.bookDescription
                 },
-                saveBook(){
+                saveBook() {
                     this.bookInfo = {
-                        bookId: this.eId, 
-                        bookName: this.eName, 
-                        bookDescription: this.eDescription, 
-                        bookType : this.eType, 
-                        bookQuantity: this.eQuantity, 
-                        bookPrice: this.ePrice, 
-                        checkOutType: this.eCheckoutType, 
+                        bookId: this.eId,
+                        bookName: this.eName,
+                        bookDescription: this.eDescription,
+                        bookType: this.eType,
+                        bookQuantity: this.eQuantity,
+                        bookPrice: this.ePrice,
+                        checkOutType: this.eCheckoutType,
                         ownerId: this.eOwnerId
                     }
-                    editBook(this.bookInfo).then((response)=>{
+                    editBook(this.bookInfo).then((response) => {
                         this.showEditBookModal = false
                         location.reload()
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         console.log(error)
                         this.showEditBookModal = false
                     });
                 },
-                closeModal(){
+                closeModal() {
                     this.showEditBookModal = false
                     this.showAddBookModal = false
                     this.showdeleteBookModal = false
@@ -663,16 +752,16 @@
                     this.eCheckoutType = "Cash on Delivery"
                     this.eOwnerId = ""
                 },
-                openModalDeleteBook(book){
+                openModalDeleteBook(book) {
                     this.eId = book.bookId;
                     this.showdeleteBookModal = true;
                 },
-                deleteBook(){
-                    deleteBook({id : this.eId}).then((response)=>{
+                deleteBook() {
+                    deleteBook({ id: this.eId }).then((response) => {
                         console.log(response)
                         this.showdeleteBookModal = false
                         location.reload()
-                    }).catch((error)=>{
+                    }).catch((error) => {
                         console.log(error)
                         this.showdeleteBookModal = false
                     })
@@ -684,4 +773,5 @@
         })
     </script>
 </body>
+
 </html>

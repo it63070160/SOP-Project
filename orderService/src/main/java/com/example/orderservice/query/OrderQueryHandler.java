@@ -26,7 +26,6 @@ public class OrderQueryHandler {
         System.out.println(storedOrders); // Remove = Error ??? How
         for(OrderEntity orderEntity : storedOrders){
             OrderRestModel orderRestModel = new OrderRestModel();
-            //            Hibernate.initialize(orderRestModel.getBookList());
             BeanUtils.copyProperties(orderEntity, orderRestModel);
             ordersRest.add(orderRestModel);
         }
@@ -40,7 +39,6 @@ public class OrderQueryHandler {
         System.out.println(storedOrders); // Remove = Error ??? How
         for(OrderEntity orderEntity : storedOrders){
             OrderRestModel orderRestModel = new OrderRestModel();
-//            Hibernate.initialize(orderRestModel.getBookList());
             BeanUtils.copyProperties(orderEntity, orderRestModel);
             ordersRest.add(orderRestModel);
         }
